@@ -13,6 +13,9 @@ namespace WF\Hypernova;
 class Renderer
 {
 
+    /**
+     * @var array default configuration
+     */
     protected static $config_defaults = [];
 
     /**
@@ -35,6 +38,13 @@ class Renderer
      */
     private $incomingJobs = [];
 
+    /**
+     * Renderer constructor.
+     *
+     * @param $url
+     * @param array $plugins
+     * @param array $config
+     */
     public function __construct($url, $plugins = [], $config = [])
     {
         $this->url = $url;
@@ -78,6 +88,9 @@ class Renderer
         }
     }
 
+    /**
+     * @return array
+     */
     protected function createJobs()
     {
         $jobs = [];
@@ -92,6 +105,10 @@ class Renderer
         return $jobs;
     }
 
+    /**
+     * @param $jobs
+     * @return array
+     */
     protected function prepareRequest($jobs)
     {
         $prepared_jobs = array_map(function($job) use ($this) {
@@ -107,15 +124,5 @@ class Renderer
         }
 
         return [$shouldSend, $prepared_jobs];
-    }
-
-    /**
-     * Delegate to plugins to reduce various actions
-     *
-     * @return mixed
-     */
-    private function pluginReduce()
-    {
-
     }
 }
