@@ -32,12 +32,12 @@ class Job
      * @param array $arr input array
      *
      * @return \WF\Hypernova\Job
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public static function fromArray(array $arr)
     {
         if (count($arr) !== 1) {
-            throw new \Exception('malformed job');
+            throw new \InvalidArgumentException('malformed job');
         }
 
         // Yes, this is intentional.

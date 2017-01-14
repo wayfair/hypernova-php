@@ -12,6 +12,9 @@ namespace WF\Hypernova\Tests;
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
 
+    /**
+     * @var \WF\Hypernova\Renderer
+     */
     private $renderer;
     /**
      * {@inheritdoc}
