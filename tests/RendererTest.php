@@ -201,4 +201,25 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             [$pluginThatThrowsInShouldSendRequest]
         ];
     }
+
+    public function testWillSendRequest() {
+        $renderer = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['prepareRequest'])
+            ->getMock();
+
+        $renderer->expects($this->once())
+            ->method('prepareRequest')
+            ->willReturn([false, [$this->defaultJob]]);
+
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $plugin->expects($this->once())
+            ->method('willSendRequest')
+            ->with($this->equalTo([$this->defaultJob]));
+
+        $renderer->addPlugin($plugin);
+
+        $renderer->render();
+    }
 }
