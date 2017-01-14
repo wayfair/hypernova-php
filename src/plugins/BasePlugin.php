@@ -24,7 +24,6 @@ class BasePlugin implements Plugin
      */
     public function onError(\Exception $error, array $jobOrJobs)
     {
-        // TODO: Implement onError() method.
     }
 
     /**

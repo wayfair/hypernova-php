@@ -9,7 +9,7 @@
 namespace WF\Hypernova;
 
 
-class Job
+class Job implements \JsonSerializable
 {
 
     public $id;
@@ -44,5 +44,13 @@ class Job
         foreach ($arr as $viewName => $args) {
             return new static($viewName, $args['name'], $args['data']);
         }
+    }
+
+    public function jsonSerialize()
+    {
+        return [$this->id => [
+            'name' => $this->name,
+            'data' => $this->data
+        ]];
     }
 }

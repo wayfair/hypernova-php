@@ -207,6 +207,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->addPlugin($plugin);
 
         $renderer->render();
+        //var_dump(json_encode(array_reduce(array_map(function($foo) {return $foo->jsonSerialize();}, $x), 'array_merge', [])));
     }
 
     /**

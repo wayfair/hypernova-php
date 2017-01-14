@@ -91,7 +91,7 @@ class Renderer
                 return $this->fallback(null, $jobs);
             }
         } catch (\Exception $e) {
-           return $this->fallback($e, $jobs);
+            return $this->fallback($e, $jobs);
         }
 
         try {
@@ -101,7 +101,8 @@ class Renderer
         }
     }
 
-    protected function makeRequest($jobs) {
+    protected function makeRequest($jobs)
+    {
         foreach ($this->plugins as $plugin) {
             $plugin->willSendRequest($jobs);
         }
@@ -111,10 +112,11 @@ class Renderer
      * @param $topLevelError
      * @param \WF\Hypernova\Job[] $jobs
      */
-    protected function fallback($topLevelError, $jobs) {
+    protected function fallback($topLevelError, $jobs)
+    {
         $result = new Response();
         $result->error = $topLevelError;
-        $result->results = array_map(function(\WF\Hypernova\Job $job) {
+        $result->results = array_map(function (\WF\Hypernova\Job $job) {
             $jobResult = new JobResult();
             $jobResult->html = $this->getFallbackHTML($job->name, $job->data);
 
@@ -139,7 +141,7 @@ class Renderer
      */
     public function createJobs()
     {
-        return array_map(function(\WF\Hypernova\Job $job) {
+        return array_map(function (\WF\Hypernova\Job $job) {
             foreach ($this->plugins as $plugin) {
                 try {
                     $job = new Job($job->id, $job->name, $plugin->getViewData($job->name, $job->data));
@@ -157,8 +159,8 @@ class Renderer
      */
     public function prepareRequest($jobs)
     {
-        $prepared_jobs = array_map(function($job) {
-            foreach($this->plugins as $plugin) {
+        $prepared_jobs = array_map(function ($job) {
+            foreach ($this->plugins as $plugin) {
                 $job = $plugin->prepareRequest($job);
             }
             return $job;
