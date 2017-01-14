@@ -91,7 +91,7 @@ class Renderer
                 return $this->fallback(null, $jobs);
             }
         } catch (\Exception $e) {
-           $this->fallback($e, $jobs);
+           return $this->fallback($e, $jobs);
         }
     }
 

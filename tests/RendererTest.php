@@ -140,4 +140,56 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$this->defaultJob], $this->renderer->createJobs());
     }
 
+
+    /**
+     * @dataProvider errorPluginProvider
+     */
+    public function testPrepareRequestErrorsCauseFallback($plugin) {
+        $renderer = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['createJobs'])
+            ->getMock();
+
+        $renderer->expects($this->once())
+            ->method('createJobs')
+            ->willReturn([$this->defaultJob]);
+
+        $renderer->addPlugin($plugin);
+
+        /**
+         * @var \WF\Hypernova\Response $response
+         */
+        $response = $renderer->render();
+
+        $this->assertInstanceOf(\WF\Hypernova\Response::class, $response);
+        $this->assertNotEmpty($response->error);
+
+        $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
+    }
+
+    public function errorPluginProvider() {
+        $pluginThatThrowsInPrepareRequest = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $pluginThatThrowsInPrepareRequest->expects($this->once())
+            ->method('prepareRequest')
+            ->willThrowException(new \Exception('Exception in prepare request'));
+
+        $pluginThatThrowsInShouldSendRequest = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $pluginThatThrowsInShouldSendRequest->expects($this->once())
+            ->method('shouldSendRequest')
+            ->willThrowException(new \Exception('Exception in should send request'));
+
+        foreach ([$pluginThatThrowsInPrepareRequest, $pluginThatThrowsInShouldSendRequest] as $plugin) {
+            foreach (['willSendRequest', 'onError', 'onSuccess', 'afterResponse'] as $methodThatShouldNotBeCalled) {
+                $plugin->expects($this->never())
+                    ->method($methodThatShouldNotBeCalled);
+            }
+        }
+
+        return [
+            [$pluginThatThrowsInPrepareRequest],
+            [$pluginThatThrowsInShouldSendRequest]
+        ];
+    }
 }
