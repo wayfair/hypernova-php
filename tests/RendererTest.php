@@ -63,13 +63,33 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testPrepareRequestCallsPlugin() {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
-        $plugin->expects($this->exactly(1))
+        $plugin->expects($this->exactly(2))
             ->method('prepareRequest')
-            ->with($this->equalTo($this->defaultJob));
+            ->with($this->equalTo($this->defaultJob))
+            ->willReturn($this->defaultJob);
 
         $this->renderer->addPlugin($plugin);
+        $this->renderer->addPlugin($plugin);
+
         $this->renderer->addJob($this->defaultJob);
 
         $this->renderer->prepareRequest([$this->defaultJob]);
+    }
+
+    public function testShouldSend() {
+        $pluginDontSend = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $pluginDoSend = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $pluginDontSend->expects($this->exactly(1))
+            ->method('shouldSendRequest')
+            ->willReturn(false);
+
+        $pluginDoSend->expects($this->never())
+            ->method('shouldSendRequest');
+
+        $this->renderer->addPlugin($pluginDontSend);
+        $this->renderer->addPlugin($pluginDoSend);
+
+        $this->assertFalse($this->renderer->prepareRequest([$this->defaultJob])[0]);
     }
 }
