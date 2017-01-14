@@ -80,14 +80,18 @@ class Renderer
     /**
      * Do the things.
      *
-     * @return array
+     * @return \WF\Hypernova\Response
      */
     public function render()
     {
         $jobs = $this->createJobs();
-        list($shouldSendRequest, $jobs) = $this->prepareRequest($jobs);
-        if (!$shouldSendRequest) {
-            return $this->fallback(null, $jobs);
+        try {
+            list($shouldSendRequest, $jobs) = $this->prepareRequest($jobs);
+            if (!$shouldSendRequest) {
+                return $this->fallback(null, $jobs);
+            }
+        } catch (\Exception $e) {
+           $this->fallback($e, $jobs);
         }
     }
 

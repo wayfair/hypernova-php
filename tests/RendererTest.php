@@ -124,4 +124,20 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
     }
 
+    public function testGetViewDataHandlesExceptions() {
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $plugin->expects($this->once())
+            ->method('getViewData')
+            ->willThrowException(new \Exception('something went wrong'));
+
+        $plugin->expects($this->once())
+            ->method('onError');
+
+        $this->renderer->addJob($this->defaultJob);
+        $this->renderer->addPlugin($plugin);
+
+        $this->assertEquals([$this->defaultJob], $this->renderer->createJobs());
+    }
+
 }
