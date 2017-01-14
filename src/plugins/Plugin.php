@@ -12,10 +12,10 @@ namespace WF\Hypernova\Plugins;
 interface Plugin
 {
     /**
-     * @param \WF\Hypernova\Job $job
-     * @return \WF\Hypernova\Job
+     * @param mixed $data
+     * @return mixed $data
      */
-    public function getViewData($job);
+    public function getViewData($data);
 
     public function prepareRequest($request);
 

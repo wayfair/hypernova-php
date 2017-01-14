@@ -96,9 +96,9 @@ class Renderer
      */
     public function createJobs()
     {
-        return array_map(function($job) {
+        return array_map(function(\WF\Hypernova\Job $job) {
             foreach ($this->plugins as $plugin) {
-                $job = $plugin->getViewData($job);
+                $job = new Job($job->viewName, $job->name, $plugin->getViewData($job->data));
             }
             return $job;
         }, $this->incomingJobs);

@@ -32,8 +32,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $plugin->expects($this->exactly(1))
             ->method('getViewData')
-            ->with($this->equalTo($job))
-            ->willReturn($job);
+            ->with($this->equalTo($job->data))
+            ->willReturn($job->data);
 
         $this->renderer->addPlugin($plugin);
         $this->renderer->addJob($job);
