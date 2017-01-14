@@ -38,11 +38,11 @@ interface Plugin
 
     /**
      * @param \Exception $error
-     * @param \WF\Hypernova\Job[] $jobs
+     * @param \WF\Hypernova\Job[] $jobOrJobs
      *
      * @return void
      */
-    public function onError(\Exception $error, array $jobs);
+    public function onError(\Exception $error, array $jobOrJobs);
 
     public function onSuccess($response, $jobs);
 
