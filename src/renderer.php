@@ -87,8 +87,35 @@ class Renderer
         $jobs = $this->createJobs();
         list($shouldSendRequest, $jobs) = $this->prepareRequest($jobs);
         if (!$shouldSendRequest) {
-
+            return $this->fallback(null, $jobs);
         }
+    }
+
+    /**
+     * @param $topLevelError
+     * @param \WF\Hypernova\Job[] $jobs
+     */
+    private function fallback($topLevelError, $jobs) {
+        $result = new Response();
+        $result->error = $topLevelError;
+        $result->results = array_map(function(\WF\Hypernova\Job $job) {
+            $jobResult = new JobResult();
+            $jobResult->html = $this->getFallbackHTML($job->name, $job->data);
+
+            return $jobResult;
+        }, $jobs);
+
+        return $result;
+    }
+
+    private function getFallbackHTML($moduleName, $data)
+    {
+        return sprintf(
+            '<div data-hypernova-key="%1$s"></div>
+    <script type="application/json" data-hypernova-key="%1$s"><!--%2$s--></script>',
+            $moduleName,
+            json_encode($data)
+        );
     }
 
     /**
@@ -98,7 +125,7 @@ class Renderer
     {
         return array_map(function(\WF\Hypernova\Job $job) {
             foreach ($this->plugins as $plugin) {
-                $job = new Job($job->viewName, $job->name, $plugin->getViewData($job->name, $job->data));
+                $job = new Job($job->id, $job->name, $plugin->getViewData($job->name, $job->data));
             }
             return $job;
         }, $this->incomingJobs);

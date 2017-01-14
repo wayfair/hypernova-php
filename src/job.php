@@ -12,16 +12,16 @@ namespace WF\Hypernova;
 class Job
 {
 
-    public $viewName;
+    public $id;
 
     public $name;
 
     public $data;
 
 
-    public function __construct($viewName, $name, $data)
+    public function __construct($id, $name, $data)
     {
-        $this->viewName = $viewName;
+        $this->id = $id;
         $this->name = $name;
         $this->data = $data;
     }

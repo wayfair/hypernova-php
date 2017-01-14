@@ -97,12 +97,12 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testRenderShouldNotSend() {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest', 'createJobs'])
+            ->setMethods(['prepareRequest'])
             ->getMock();
 
         $renderer->expects($this->once())
             ->method('prepareRequest')
-            ->willReturn([false, []]);
+            ->willReturn([false, [$this->defaultJob]]);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
@@ -113,8 +113,15 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->addPlugin($plugin);
 
-        // TODO assert some things about response once I make that obj
+        /**
+         * @var \WF\Hypernova\Response $response
+         */
         $response = $renderer->render();
+
+        $this->assertInstanceOf(\WF\Hypernova\Response::class, $response);
+        $this->assertNull($response->error);
+
+        $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
     }
 
 }
