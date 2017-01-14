@@ -67,10 +67,13 @@ class Renderer
     /**
      * Add a job
      *
-     * @param $job { [view]: { name: String, data: ReactProps } }
+     * @param \WF\Hypernova\Job|array $job Job to add, { [view]: { name: String, data: ReactProps } }
      */
     public function addJob($job)
     {
+        if (is_array($job)) {
+            $job = Job::fromArray($job);
+        }
         $this->incomingJobs[] = $job;
     }
 
@@ -91,7 +94,7 @@ class Renderer
     /**
      * @return array
      */
-    protected function createJobs()
+    public function createJobs()
     {
         $jobs = [];
         foreach ($this->incomingJobs as $viewName => $job) {
@@ -109,9 +112,9 @@ class Renderer
      * @param $jobs
      * @return array
      */
-    protected function prepareRequest($jobs)
+    public function prepareRequest($jobs)
     {
-        $prepared_jobs = array_map(function($job) use ($this) {
+        $prepared_jobs = array_map(function($job) {
             foreach($this->plugins as $plugin) {
                 $job = $plugin->prepareRequest($job);
             }
