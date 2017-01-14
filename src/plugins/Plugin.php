@@ -15,7 +15,7 @@ interface Plugin
      * @param mixed $data
      * @return mixed $data
      */
-    public function getViewData($data);
+    public function getViewData($name, $data);
 
     /**
      * @param \WF\Hypernova\Job $request
