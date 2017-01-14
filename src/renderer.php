@@ -132,7 +132,7 @@ class Renderer
                 try {
                     $job = new Job($job->id, $job->name, $plugin->getViewData($job->name, $job->data));
                 } catch (\Exception $e) {
-                    $plugin->onError($e, $job);
+                    $plugin->onError($e, $this->incomingJobs);
                 }
             }
             return $job;

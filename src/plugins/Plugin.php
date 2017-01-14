@@ -31,11 +31,18 @@ interface Plugin
 
     /**
      * @param \WF\Hypernova\Job[] $jobs
+     *
      * @return void
      */
     public function willSendRequest($jobs);
 
-    public function onError($error, $jobs);
+    /**
+     * @param \Exception $error
+     * @param \WF\Hypernova\Job[] $jobs
+     *
+     * @return void
+     */
+    public function onError(\Exception $error, array $jobs);
 
     public function onSuccess($response, $jobs);
 
