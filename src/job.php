@@ -29,7 +29,7 @@ class Job
     /**
      * Factory to create from ['viewName' => ['name' => $name, 'data' => $data]]
      *
-     * @param array $arr
+     * @param array $arr input array
      *
      * @return \WF\Hypernova\Job
      * @throws \Exception
@@ -40,6 +40,7 @@ class Job
             throw new \Exception('malformed job');
         }
 
+        // Yes, this is intentional.
         foreach ($arr as $viewName => $args) {
             return new static($viewName, $args['name'], $args['data']);
         }

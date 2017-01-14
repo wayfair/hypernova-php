@@ -11,14 +11,22 @@ namespace WF\Hypernova\Plugins;
 
 interface Plugin
 {
-    public function getViewData($name, $data);
+    /**
+     * @param \WF\Hypernova\Job $job
+     * @return \WF\Hypernova\Job
+     */
+    public function getViewData($job);
 
     public function prepareRequest($request);
 
+    /**
+     * @param \WF\Hypernova\Job[] $jobs
+     * @return bool
+     */
     public function shouldSendRequest($jobs);
 
     /**
-     * @param $jobs
+     * @param \WF\Hypernova\Job[] $jobs
      * @return void
      */
     public function willSendRequest($jobs);

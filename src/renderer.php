@@ -34,7 +34,7 @@ class Renderer
     private $config;
 
     /**
-     * @var array
+     * @var \WF\Hypernova\Job[]
      */
     private $incomingJobs = [];
 
@@ -96,16 +96,12 @@ class Renderer
      */
     public function createJobs()
     {
-        $jobs = [];
-        foreach ($this->incomingJobs as $viewName => $job) {
-            $data = $job->data;
+        return array_map(function($job) {
             foreach ($this->plugins as $plugin) {
-                $data = $plugin->getViewData($viewName, $job->data);
+                $job = $plugin->getViewData($job);
             }
-            $jobs[$viewName] = ['name' => $job->name, 'data' => $data];
-        }
-
-        return $jobs;
+            return $job;
+        }, $this->incomingJobs);
     }
 
     /**
