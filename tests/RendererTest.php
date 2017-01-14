@@ -71,9 +71,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addPlugin($plugin);
         $this->renderer->addPlugin($plugin);
 
-        $this->renderer->addJob($this->defaultJob);
+        $allJobs = [$this->defaultJob];
 
-        $this->renderer->prepareRequest([$this->defaultJob]);
+        $this->assertEquals($allJobs, $this->renderer->prepareRequest($allJobs)[1]);
     }
 
     public function testShouldSend() {
