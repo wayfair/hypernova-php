@@ -9,6 +9,8 @@
 
 namespace WF\Hypernova\Tests;
 
+use WF\Hypernova\Job;
+
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
 
@@ -26,7 +28,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testCreateJobs() {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
-        $job = new \WF\Hypernova\Job('myView', 'my_component', []);
+        $job = new Job('myView', 'my_component', []);
 
         $plugin->expects($this->exactly(1))
             ->method('getViewData')
@@ -37,5 +39,20 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addJob($job);
 
         $this->assertEquals([$job], $this->renderer->createJobs());
+    }
+
+    public function testMultipleJobsGetCreated() {
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        foreach([1,2,3,4,5] as $id) {
+            $this->renderer->addJob(new Job('myView' . $id, 'my_component', []));
+        }
+
+        $plugin->expects($this->exactly(5))
+            ->method('getViewData');
+
+        $this->renderer->addPlugin($plugin);
+
+        $this->renderer->createJobs();
     }
 }
