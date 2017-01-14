@@ -113,7 +113,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->addPlugin($plugin);
 
-        $renderer->render();
+        // TODO assert some things about response once I make that obj
+        $response = $renderer->render();
     }
 
 }

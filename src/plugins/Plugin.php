@@ -17,6 +17,10 @@ interface Plugin
      */
     public function getViewData($data);
 
+    /**
+     * @param \WF\Hypernova\Job $request
+     * @return \WF\Hypernova\Job
+     */
     public function prepareRequest($request);
 
     /**

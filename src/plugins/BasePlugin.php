@@ -64,6 +64,5 @@ class BasePlugin implements Plugin
      */
     public function willSendRequest($jobs)
     {
-        return true;
     }
 }
