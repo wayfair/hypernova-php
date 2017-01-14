@@ -18,17 +18,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      * @var \WF\Hypernova\Renderer
      */
     private $renderer;
+
+    private $defaultJob;
+
     /**
      * {@inheritdoc}
      */
     public function setUp() {
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
+        $this->defaultJob = new Job('myView', 'my_component', []);
     }
 
     public function testCreateJobs() {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
-        $job = new Job('myView', 'my_component', []);
+        $job = $this->defaultJob;
 
         $plugin->expects($this->exactly(1))
             ->method('getViewData')
@@ -44,8 +48,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testMultipleJobsGetCreated() {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
-        foreach([1,2,3,4,5] as $id) {
-            $this->renderer->addJob(new Job('myView' . $id, 'my_component', []));
+        for($i = 0; $i < 5; $i++) {
+            $this->renderer->addJob($this->defaultJob);
         }
 
         $plugin->expects($this->exactly(5))
@@ -54,5 +58,18 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addPlugin($plugin);
 
         $this->renderer->createJobs();
+    }
+
+    public function testPrepareRequestCallsPlugin() {
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $plugin->expects($this->exactly(1))
+            ->method('prepareRequest')
+            ->with($this->equalTo($this->defaultJob));
+
+        $this->renderer->addPlugin($plugin);
+        $this->renderer->addJob($this->defaultJob);
+
+        $this->renderer->prepareRequest([$this->defaultJob]);
     }
 }
