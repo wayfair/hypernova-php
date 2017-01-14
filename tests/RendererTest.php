@@ -25,12 +25,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp() {
+    public function setUp()
+    {
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
         $this->defaultJob = new Job('myView', 'my_component', []);
     }
 
-    public function testCreateJobs() {
+    public function testCreateJobs()
+    {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
         $job = $this->defaultJob;
@@ -46,10 +48,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$job], $this->renderer->createJobs());
     }
 
-    public function testMultipleJobsGetCreated() {
+    public function testMultipleJobsGetCreated()
+    {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
-        for($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $this->renderer->addJob($this->defaultJob);
         }
 
@@ -61,7 +64,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->createJobs();
     }
 
-    public function testPrepareRequestCallsPlugin() {
+    public function testPrepareRequestCallsPlugin()
+    {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
         $plugin->expects($this->exactly(2))
@@ -77,7 +81,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($allJobs, $this->renderer->prepareRequest($allJobs)[1]);
     }
 
-    public function testShouldSend() {
+    public function testShouldSend()
+    {
         $pluginDontSend = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
         $pluginDoSend = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
@@ -94,7 +99,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->renderer->prepareRequest([$this->defaultJob])[0]);
     }
 
-    public function testRenderShouldNotSend() {
+    public function testRenderShouldNotSend()
+    {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
             ->setMethods(['prepareRequest'])
@@ -124,7 +130,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
     }
 
-    public function testGetViewDataHandlesExceptions() {
+    public function testGetViewDataHandlesExceptions()
+    {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
         $plugin->expects($this->once())
@@ -144,7 +151,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider errorPluginProvider
      */
-    public function testPrepareRequestErrorsCauseFallback($plugin) {
+    public function testPrepareRequestErrorsCauseFallback($plugin)
+    {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
             ->setMethods(['createJobs'])
@@ -167,7 +175,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
     }
 
-    public function errorPluginProvider() {
+    public function errorPluginProvider()
+    {
         $pluginThatThrowsInPrepareRequest = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
         $pluginThatThrowsInPrepareRequest->expects($this->once())
