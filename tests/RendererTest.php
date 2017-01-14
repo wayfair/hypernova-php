@@ -9,7 +9,7 @@
 
 namespace WF\Hypernova\Tests;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -23,7 +23,19 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
     }
 
-    public function testTestsWork() {
-        $this->assertEquals(1,1);
+    public function testCreateJobs() {
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $job = new \WF\Hypernova\Job('myView', 'my_component', []);
+
+        $plugin->expects($this->exactly(1))
+            ->method('getViewData')
+            ->with($this->equalTo($job))
+            ->willReturn($job);
+
+        $this->renderer->addPlugin($plugin);
+        $this->renderer->addJob($job);
+
+        $this->assertEquals([$job], $this->renderer->createJobs());
     }
 }

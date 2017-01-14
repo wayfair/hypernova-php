@@ -14,4 +14,4 @@ Using it:
 
 Run tests:
 
-`phpunit`
+`./vendor/phpunit/phpunit/phpunit`
