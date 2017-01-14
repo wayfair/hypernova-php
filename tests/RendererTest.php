@@ -101,14 +101,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderShouldNotSend()
     {
-        $renderer = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest'])
-            ->getMock();
-
-        $renderer->expects($this->once())
-            ->method('prepareRequest')
-            ->willReturn([false, [$this->defaultJob]]);
+        $renderer = $this->getMockedRenderer(false);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
@@ -203,14 +196,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testWillSendRequest() {
-        $renderer = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest'])
-            ->getMock();
-
-        $renderer->expects($this->once())
-            ->method('prepareRequest')
-            ->willReturn([false, [$this->defaultJob]]);
+        $renderer = $this->getMockedRenderer(true);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
@@ -221,5 +207,24 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->addPlugin($plugin);
 
         $renderer->render();
+    }
+
+    /**
+     * Helper fn to get a mocked renderer which will correctly send data through past the `prepareRequest` stage.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\WF\Hypernova\Renderer
+     */
+    private function getMockedRenderer($shouldSendRequest)
+    {
+        $renderer = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['prepareRequest'])
+            ->getMock();
+
+        $renderer->expects($this->once())
+            ->method('prepareRequest')
+            ->willReturn([$shouldSendRequest, [$this->defaultJob]]);
+
+        return $renderer;
     }
 }

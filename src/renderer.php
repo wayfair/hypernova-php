@@ -93,13 +93,25 @@ class Renderer
         } catch (\Exception $e) {
            return $this->fallback($e, $jobs);
         }
+
+        try {
+            return $this->makeRequest($jobs);
+        } catch (\Exception $e) {
+            return $this->fallback($e, $jobs);
+        }
+    }
+
+    protected function makeRequest($jobs) {
+        foreach ($this->plugins as $plugin) {
+            $plugin->willSendRequest($jobs);
+        }
     }
 
     /**
      * @param $topLevelError
      * @param \WF\Hypernova\Job[] $jobs
      */
-    private function fallback($topLevelError, $jobs) {
+    protected function fallback($topLevelError, $jobs) {
         $result = new Response();
         $result->error = $topLevelError;
         $result->results = array_map(function(\WF\Hypernova\Job $job) {
