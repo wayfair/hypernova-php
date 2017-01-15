@@ -8,7 +8,6 @@
 
 namespace WF\Hypernova\Tests;
 
-
 use WF\Hypernova\Job;
 use WF\Hypernova\JobResult;
 
@@ -18,11 +17,13 @@ class JobResultTest extends \PHPUnit\Framework\TestCase
      * @dataProvider badServerResultProvider
      * @expectedException \InvalidArgumentException
      */
-    public function testFromServerResultBadData($data) {
+    public function testFromServerResultBadData($data)
+    {
         JobResult::fromServerResult($data, new Job('foo', []));
     }
 
-    public function badServerResultProvider() {
+    public function badServerResultProvider()
+    {
         return [
             [null],
             [['something' => 'foobar']],
@@ -30,7 +31,8 @@ class JobResultTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testFromServerResultPopulates() {
+    public function testFromServerResultPopulates()
+    {
         $originalJob = new Job('foo', []);
         $jobResult = JobResult::fromServerResult(['success' => true, 'html' => '<div>data</div>', 'error' => null], $originalJob);
 
