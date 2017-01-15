@@ -133,7 +133,7 @@ class Renderer
             []
         );
 
-        $response = $this->getClient()->post($this->url);
+        $response = $this->getClient()->post($this->url, ['json' => $marshalledRequestData]);
 
         if ($response->getStatusCode() !== 200) {
             throw new RequestException('Hypernova server returned a non-200 response');
