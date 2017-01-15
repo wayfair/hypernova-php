@@ -319,18 +319,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      */
     private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200, $additionalMockMethods = [], $clientResponse = null)
     {
-        $renderer = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(array_merge(['prepareRequest', 'getClient'], (array)$additionalMockMethods))
-            ->getMock();
-
-        $renderer->expects($this->once())
-            ->method('prepareRequest')
-            ->willReturn([$shouldSendRequest, ['id1' => $this->defaultJob]]);
-
-        $renderer->addJob('myView', $this->defaultJob);
-        $renderer->addJob('myOtherView', $this->defaultJob);
-
+        // Secret sauce so we don't have to mock our HTTP client
         $mockHandler = new \GuzzleHttp\Handler\MockHandler(
             [
                 new \GuzzleHttp\Psr7\Response(
@@ -342,9 +331,17 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         );
         $handler = \GuzzleHttp\HandlerStack::create($mockHandler);
 
-        $renderer->expects($this->any())
-            ->method('getClient')
-            ->willReturn(new \GuzzleHttp\Client(['handler' => $handler]));
+        $renderer = $this->getMockBuilder(Renderer::class)
+            ->setConstructorArgs(['http://localhost:8080/batch', [], ['handler' => $handler]])
+            ->setMethods(array_merge(['prepareRequest'], (array)$additionalMockMethods))
+            ->getMock();
+
+        $renderer->expects($this->once())
+            ->method('prepareRequest')
+            ->willReturn([$shouldSendRequest, ['id1' => $this->defaultJob]]);
+
+        $renderer->addJob('myView', $this->defaultJob);
+        $renderer->addJob('myOtherView', $this->defaultJob);
 
         return $renderer;
     }
