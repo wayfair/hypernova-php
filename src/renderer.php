@@ -149,9 +149,7 @@ class Renderer
      */
     protected function doRequest($jobs)
     {
-        $marshalledRequestData = json_encode($jobs);
-
-        $response = $this->getClient()->post($this->url, ['json' => $marshalledRequestData]);
+        $response = $this->getClient()->post($this->url, ['json' => $jobs]);
 
         if ($response->getStatusCode() !== 200) {
             throw new RequestException('Hypernova server returned a non-200 response');
