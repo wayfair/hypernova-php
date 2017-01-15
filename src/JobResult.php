@@ -20,4 +20,27 @@ class JobResult
      * @var string rendered HTML
      */
     public $html;
+
+    /**
+     * @var bool
+     */
+    public $success;
+
+    /**
+     * @param $serverResult
+     * @return \WF\Hypernova\JobResult
+     */
+    public static function fromServerResult($serverResult) {
+        if (empty($serverResult->html) && empty($serverResult->error)) {
+            throw new \InvalidArgumentException('Server result malformed');
+        }
+
+        $res = new static();
+
+        $res->error = $serverResult->error;
+        $res->html = $serverResult->html;
+        $res->success = $serverResult->success;
+
+        return $res;
+    }
 }

@@ -22,7 +22,7 @@ class BasePlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function onError(\Exception $error, array $jobOrJobs)
+    public function onError($error, array $jobOrJobs)
     {
     }
 

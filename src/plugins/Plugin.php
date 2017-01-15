@@ -37,12 +37,12 @@ interface Plugin
     public function willSendRequest($jobs);
 
     /**
-     * @param \Exception $error
+     * @param \Exception|mixed $error
      * @param \WF\Hypernova\Job[] $jobOrJobs
      *
      * @return void
      */
-    public function onError(\Exception $error, array $jobOrJobs);
+    public function onError($error, array $jobOrJobs);
 
     public function onSuccess($response, $jobs);
 
