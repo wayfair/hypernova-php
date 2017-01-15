@@ -20,8 +20,4 @@ class Response
      * @var \WF\Hypernova\JobResult[]
      */
     public $results;
-
-    public static function fromJson($json) {
-        var_dump($json);
-    }
 }
