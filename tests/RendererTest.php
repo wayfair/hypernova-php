@@ -32,7 +32,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
-        $this->defaultJob = new Job('myView', 'my_component', ['foo'=> ['bar'=>[], 'baz' =>[]]]);
+        $this->defaultJob = new Job('myView', 'my_component', ['foo' => ['bar' => [], 'baz' => []]]);
     }
 
     public function testCreateJobs()
@@ -199,7 +199,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testWillSendRequest() {
+    public function testWillSendRequest()
+    {
         $renderer = $this->getMockedRenderer(true);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
