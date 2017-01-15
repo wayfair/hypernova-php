@@ -44,7 +44,12 @@ interface Plugin
      */
     public function onError($error, array $jobOrJobs);
 
-    public function onSuccess($response, $jobs);
+    /**
+     * @param \WF\Hypernova\JobResult $jobResult
+     *
+     * @return void
+     */
+    public function onSuccess($jobResult);
 
     public function afterResponse($currentResponse, $originalResponse);
 }

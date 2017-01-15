@@ -111,8 +111,27 @@ class Renderer
         }
 
         $response = $this->doRequest($jobs);
-        foreach ($response as $id => $jobResult) {
+        return $this->finalize($response);
+    }
 
+    /**
+     * @param \WF\Hypernova\JobResult[] $jobResults
+     */
+    protected function finalize($jobResults) {
+        foreach ($jobResults as $jobResult) {
+            if ($jobResult->error) {
+                foreach ($this->plugins as $plugin) {
+                    $plugin->onError($jobResult->error, [$jobResult->originalJob]);
+                }
+            }
+        }
+
+        foreach ($jobResults as $id => $jobResult) {
+            if ($jobResult->success) {
+                foreach ($this->plugins as $plugin) {
+                    $plugin->onSuccess($jobResult);
+                }
+            }
         }
     }
 
@@ -152,7 +171,7 @@ class Renderer
 
         $jobResults = [];
         foreach ($body->results as $id => $jobResult) {
-            $jobResults[$id] = JobResult::fromServerResult($jobResult);
+            $jobResults[$id] = JobResult::fromServerResult($jobResult, $marshalledRequestData[$id]);
         }
         return $jobResults;
     }

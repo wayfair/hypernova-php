@@ -29,9 +29,8 @@ class BasePlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function onSuccess($response, $jobs)
+    public function onSuccess($jobResult)
     {
-        // TODO: Implement onSuccess() method.
     }
 
     /**
