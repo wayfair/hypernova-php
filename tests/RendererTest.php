@@ -10,6 +10,7 @@
 namespace WF\Hypernova\Tests;
 
 use WF\Hypernova\Job;
+use WF\Hypernova\JobResult;
 use WF\Hypernova\Renderer;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
@@ -239,8 +240,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->render();
     }
-/*
-    public function testOnErrorInFinalize() {
+
+    public function testOnErrorInFinalize()
+    {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
             ->setMethods(['prepareRequest', 'getClient', 'doRequest'])
@@ -252,8 +254,19 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->expects($this->once())
             ->method('doRequest')
-            ->willReturn
-    }*/
+            ->willReturn(['id1' => JobResult::fromServerResult(['success' => false, 'error' => 'an error!', 'html' => null], $this->defaultJob)]);
+
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $plugin->expects($this->once())
+            ->method('onError')
+            ->with($this->equalTo('an error!'), $this->anything());
+
+        $renderer->addPlugin($plugin);
+
+        $renderer->render();
+    }
+
 
     /**
      * Helper fn to get a mocked renderer which will correctly send data through past the `prepareRequest` stage.
