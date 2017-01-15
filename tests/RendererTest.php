@@ -17,6 +17,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 {
     private static $raw_server_response = '{"success":true,"error":null,"results":{"myView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null},"myOtherView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null}}}';
 
+    private static $raw_error_response = '{"success":true,"error":null,"results":{"product_card":{"name":"nonexistent_component","html":null,"meta":{},"duration":0.521553,"statusCode":404,"success":false,"error":{"name":"ReferenceError","message":"Component \"nonexistent_component\" not registered","stack":["ReferenceError: Component \"nonexistent_component\" not registered","at YOUR-COMPONENT-DID-NOT-REGISTER_nonexistent_component:1:1","at notFound (/src/hypernova/node_modules/hypernova/lib/utils/BatchManager.js:27:15)","at /src/hypernova/node_modules/hypernova/lib/utils/BatchManager.js:178:19","at tryCatcher (/src/hypernova/node_modules/bluebird/js/release/util.js:16:23)","at Promise._settlePromiseFromHandler (/src/hypernova/node_modules/bluebird/js/release/promise.js:510:31)","at Promise._settlePromise (/src/hypernova/node_modules/bluebird/js/release/promise.js:567:18)","at Promise._settlePromiseCtx (/src/hypernova/node_modules/bluebird/js/release/promise.js:604:10)","at Async._drainQueue (/src/hypernova/node_modules/bluebird/js/release/async.js:138:12)","at Async._drainQueues (/src/hypernova/node_modules/bluebird/js/release/async.js:143:10)","at Immediate.Async.drainQueues (/src/hypernova/node_modules/bluebird/js/release/async.js:17:14)","atrunCallback (timers.js:574:20)","at tryOnImmediate (timers.js:554:5)","at processImmediate [as _immediateCallback] (timers.js:533:5)"]}}}}';
+
     /**
      * @var \WF\Hypernova\Renderer
      */
@@ -286,7 +288,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      *
      * @return \WF\Hypernova\Renderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200, $additionalMockMethods = [])
+    private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200, $additionalMockMethods = [], $clientResponse = null)
     {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
@@ -305,7 +307,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 new \GuzzleHttp\Psr7\Response(
                     $clientResponseCode,
                     [],
-                    $clientResponseCode == 200 ? self::$raw_server_response : null
+                    $clientResponseCode == 200 ? ($clientResponse ?: self::$raw_server_response) : null
                 )
             ]
         );
