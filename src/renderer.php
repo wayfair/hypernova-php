@@ -23,7 +23,7 @@ class Renderer
     /**
      * @var \WF\Hypernova\Plugins\Plugin[]
      */
-    protected $plugins;
+    protected $plugins = [];
 
     /**
      * @var string

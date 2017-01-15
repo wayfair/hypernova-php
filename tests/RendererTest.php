@@ -243,14 +243,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function testOnErrorInFinalize()
     {
-        $renderer = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest', 'getClient', 'doRequest'])
-            ->getMock();
-
-        $renderer->expects($this->once())
-            ->method('prepareRequest')
-            ->willReturn([true, [$this->defaultJob]]);
+        $renderer = $this->getMockedRenderer(true, 200, 'doRequest');
 
         $renderer->expects($this->once())
             ->method('doRequest')
@@ -268,18 +261,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     }
 
     public function testExceptionInMakeRequest() {
-        $renderer = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest', 'getClient', 'makeRequest', 'fallback'])
-            ->getMock();
-
-        $renderer->expects($this->once())
-            ->method('prepareRequest')
-            ->willReturn([true, ['id1' => $this->defaultJob]]);
-
-        $renderer->expects($this->once())
-            ->method('makeRequest')
-            ->willThrowException(new \Exception('any exception'));
+        $renderer = $this->getMockedRenderer(true, 500, 'fallback');
 
         $renderer->expects($this->once())
             ->method('fallback');
@@ -293,11 +275,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\WF\Hypernova\Renderer
      */
-    private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200)
+    private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200, $additionalMockMethods = [])
     {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest', 'getClient'])
+            ->setMethods(array_merge(['prepareRequest', 'getClient'], (array) $additionalMockMethods))
             ->getMock();
 
         $renderer->expects($this->once())
