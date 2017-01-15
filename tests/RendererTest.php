@@ -36,6 +36,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->defaultJob = new Job('my_component', ['foo' => ['bar' => [], 'baz' => []]]);
     }
 
+    /**
+     * @return void
+     */
     public function testCreateJobs()
     {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
@@ -215,7 +218,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->render();
     }
 
-    public function testOnSuccess() {
+    public function testOnSuccess()
+    {
         $renderer = $this->getMockedRenderer(true);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
@@ -228,7 +232,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->render();
     }
 
-    public function testAfterResponse() {
+    public function testAfterResponse()
+    {
         $renderer = $this->getMockedRenderer(true);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
@@ -247,7 +252,10 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->expects($this->once())
             ->method('doRequest')
-            ->willReturn(['id1' => JobResult::fromServerResult(['success' => false, 'error' => 'an error!', 'html' => null], $this->defaultJob)]);
+            ->willReturn(['id1' => JobResult::fromServerResult(
+                ['success' => false, 'error' => 'an error!', 'html' => null],
+                $this->defaultJob
+            )]);
 
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
@@ -260,7 +268,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->render();
     }
 
-    public function testExceptionInMakeRequest() {
+    public function testExceptionInMakeRequest()
+    {
         $renderer = $this->getMockedRenderer(true, 500, 'fallback');
 
         $renderer->expects($this->once())
@@ -271,15 +280,17 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * Helper fn to get a mocked renderer which will correctly send data through past the `prepareRequest` stage.
+     * @param bool $shouldSendRequest
+     * @param int $clientResponseCode
+     * @param string|array $additionalMockMethods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\WF\Hypernova\Renderer
+     * @return \WF\Hypernova\Renderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200, $additionalMockMethods = [])
     {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge(['prepareRequest', 'getClient'], (array) $additionalMockMethods))
+            ->setMethods(array_merge(['prepareRequest', 'getClient'], (array)$additionalMockMethods))
             ->getMock();
 
         $renderer->expects($this->once())
@@ -291,7 +302,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $mockHandler = new \GuzzleHttp\Handler\MockHandler(
             [
-                new \GuzzleHttp\Psr7\Response($clientResponseCode,
+                new \GuzzleHttp\Psr7\Response(
+                    $clientResponseCode,
                     [],
                     $clientResponseCode == 200 ? self::$raw_server_response : null
                 )

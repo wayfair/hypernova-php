@@ -8,30 +8,39 @@
 
 namespace WF\Hypernova\Tests;
 
-
-class JobTest extends \PHPUnit_Framework_TestCase
+class JobTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @param array $arr
+     *
      * @dataProvider badFactoryDataProvider
      * @expectedException \InvalidArgumentException
      */
-    public function testThrowsMalformedException($arr) {
+    public function testThrowsMalformedException($arr)
+    {
         \WF\Hypernova\Job::fromArray($arr);
     }
 
-    public function badFactoryDataProvider() {
+    /**
+     * @return array
+     */
+    public function badFactoryDataProvider()
+    {
         return [
             [[]],
-            [[1,2,3]],
+            [[1, 2, 3]],
             [['foo' => 'bar', 'baz' => 'quux']]
         ];
     }
 
-    public function testFactoryPopulates() {
+    /**
+     * @return void
+     */
+    public function testFactoryPopulates()
+    {
         $job = \WF\Hypernova\Job::fromArray(['name' => 'my_component', 'data' => ['some' => 'data']]);
 
         $this->assertEquals('my_component', $job->name);
         $this->assertEquals(['some' => 'data'], $job->data);
     }
-
 }
