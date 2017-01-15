@@ -267,6 +267,26 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->render();
     }
 
+    public function testExceptionInMakeRequest() {
+        $renderer = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['prepareRequest', 'getClient', 'makeRequest', 'fallback'])
+            ->getMock();
+
+        $renderer->expects($this->once())
+            ->method('prepareRequest')
+            ->willReturn([true, ['id1' => $this->defaultJob]]);
+
+        $renderer->expects($this->once())
+            ->method('makeRequest')
+            ->willThrowException(new \Exception('any exception'));
+
+        $renderer->expects($this->once())
+            ->method('fallback');
+
+        $renderer->render();
+    }
+
 
     /**
      * Helper fn to get a mocked renderer which will correctly send data through past the `prepareRequest` stage.
