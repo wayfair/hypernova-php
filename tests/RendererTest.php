@@ -227,6 +227,19 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->render();
     }
 
+    public function testAfterResponse() {
+        $renderer = $this->getMockedRenderer(true);
+
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $plugin->expects($this->once())
+            ->method('afterResponse');
+
+        $renderer->addPlugin($plugin);
+
+        $renderer->render();
+    }
+
     /**
      * Helper fn to get a mocked renderer which will correctly send data through past the `prepareRequest` stage.
      *
