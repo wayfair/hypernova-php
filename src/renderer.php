@@ -217,7 +217,7 @@ class Renderer
      *
      * @return string
      */
-    private function getFallbackHTML($moduleName, $data)
+    protected function getFallbackHTML($moduleName, $data)
     {
         return sprintf(
             '<div data-hypernova-key="%1$s"></div>
@@ -230,7 +230,7 @@ class Renderer
     /**
      * @return \WF\Hypernova\Job[]
      */
-    public function createJobs()
+    protected function createJobs()
     {
         return array_map(function (\WF\Hypernova\Job $job) {
             foreach ($this->plugins as $plugin) {
@@ -248,7 +248,7 @@ class Renderer
      * @param $jobs
      * @return array
      */
-    public function prepareRequest($jobs)
+    protected function prepareRequest($jobs)
     {
         $preparedJobs = array_map(function ($job) {
             foreach ($this->plugins as $plugin) {

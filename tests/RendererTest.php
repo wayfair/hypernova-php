@@ -53,7 +53,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addPlugin($plugin);
         $this->renderer->addJob('id1', $job);
 
-        $this->assertArrayHasKey('id1', $this->renderer->createJobs());
+        $this->assertArrayHasKey('id1', $this->callInternalMethodOfThing($this->renderer, 'createJobs'));
     }
 
     public function testMultipleJobsGetCreated()
@@ -69,7 +69,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $this->renderer->addPlugin($plugin);
 
-        $this->renderer->createJobs();
+        $this->callInternalMethodOfThing($this->renderer, 'createJobs');
     }
 
     public function testPrepareRequestCallsPlugin()
@@ -86,7 +86,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $allJobs = [$this->defaultJob];
 
-        $this->assertEquals($allJobs, $this->renderer->prepareRequest($allJobs)[1]);
+        $this->assertEquals($allJobs, $this->callInternalMethodOfThing($this->renderer, 'prepareRequest', [$allJobs])[1]);
     }
 
     public function testShouldSend()
@@ -104,7 +104,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addPlugin($pluginDontSend);
         $this->renderer->addPlugin($pluginDoSend);
 
-        $this->assertFalse($this->renderer->prepareRequest([$this->defaultJob])[0]);
+        $this->assertFalse($this->callInternalMethodOfThing($this->renderer, 'prepareRequest', [[$this->defaultJob]])[0]);
     }
 
     public function testRenderShouldNotSend()
@@ -145,7 +145,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addJob('id1', $this->defaultJob);
         $this->renderer->addPlugin($plugin);
 
-        $this->assertEquals(['id1' => $this->defaultJob], $this->renderer->createJobs());
+        $this->assertEquals(['id1' => $this->defaultJob], $this->callInternalMethodOfThing($this->renderer, 'createJobs'));
     }
 
 
@@ -316,5 +316,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn(new \GuzzleHttp\Client(['handler' => $handler]));
 
         return $renderer;
+    }
+
+    /**
+     * Because I don't believe you should refrain from testing private/protected members.
+     *
+     * @param mixed $instance
+     * @param string $methodName
+     * @param array $args
+     * @return mixed
+     */
+    private function callInternalMethodOfThing($instance, $methodName, $args = [])
+    {
+        $reflector = new \ReflectionObject($instance);
+        $method = $reflector->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invoke($instance, ...$args);
     }
 }
