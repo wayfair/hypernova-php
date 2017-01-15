@@ -104,7 +104,11 @@ class Renderer
         }
     }
 
-
+    /**
+     * @param \WF\Hypernova\Job[] $jobs
+     *
+     * @return \WF\Hypernova\JobResult[]
+     */
     protected function makeRequest($jobs)
     {
         foreach ($this->plugins as $plugin) {
@@ -118,7 +122,7 @@ class Renderer
     /**
      * @param \WF\Hypernova\JobResult[] $jobResults
      *
-     * @return \WF\Hypernova\JobResult[]
+     * @return \WF\Hypernova\Response
      */
     protected function finalize($jobResults)
     {
@@ -142,7 +146,10 @@ class Renderer
             $jobResults = $plugin->afterResponse($jobResults);
         }
 
-        return $jobResults;
+        $response = new Response();
+        $response->results = $jobResults;
+
+        return $response;
     }
 
     /**
@@ -188,7 +195,7 @@ class Renderer
      * @param mixed $topLevelError
      * @param \WF\Hypernova\Job[] $jobs
      *
-     * @return \WF\Hypernova\JobResult[]
+     * @return \WF\Hypernova\Response
      */
     protected function fallback($topLevelError, $jobs)
     {
@@ -221,7 +228,7 @@ class Renderer
     }
 
     /**
-     * @return array
+     * @return \WF\Hypernova\Job[]
      */
     public function createJobs()
     {

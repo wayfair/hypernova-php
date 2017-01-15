@@ -8,7 +8,6 @@
 
 namespace WF\Hypernova;
 
-
 class Job implements \JsonSerializable
 {
     public $name;
