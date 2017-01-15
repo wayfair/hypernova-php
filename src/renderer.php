@@ -172,7 +172,7 @@ class Renderer
 
         if ($body['error']) {
             foreach ($this->plugins as $plugin) {
-                $plugin->onError($body['error'], $body['results']);
+                $plugin->onError($body['error'], isset($body['results']) ? $body['results'] : null);
             }
         }
 
