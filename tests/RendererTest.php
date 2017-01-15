@@ -124,7 +124,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\WF\Hypernova\Response::class, $response);
         $this->assertNull($response->error);
 
-        $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
+        $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results['id1']->html);
     }
 
     public function testGetViewDataHandlesExceptions()
@@ -207,7 +207,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $plugin->expects($this->once())
             ->method('willSendRequest')
-            ->with($this->equalTo([$this->defaultJob]));
+            ->with($this->equalTo(['id1' => $this->defaultJob]));
 
         $renderer->addPlugin($plugin);
 
@@ -239,6 +239,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->render();
     }
+/*
+    public function testOnErrorInFinalize() {
+        $renderer = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['prepareRequest', 'getClient', 'doRequest'])
+            ->getMock();
+
+        $renderer->expects($this->once())
+            ->method('prepareRequest')
+            ->willReturn([true, [$this->defaultJob]]);
+
+        $renderer->expects($this->once())
+            ->method('doRequest')
+            ->willReturn
+    }*/
 
     /**
      * Helper fn to get a mocked renderer which will correctly send data through past the `prepareRequest` stage.
@@ -254,7 +269,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->expects($this->once())
             ->method('prepareRequest')
-            ->willReturn([$shouldSendRequest, [$this->defaultJob]]);
+            ->willReturn([$shouldSendRequest, ['id1' => $this->defaultJob]]);
 
         $renderer->addJob('myView', $this->defaultJob);
         $renderer->addJob('myOtherView', $this->defaultJob);
