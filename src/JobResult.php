@@ -36,11 +36,10 @@ class JobResult
      *
      * @return \WF\Hypernova\JobResult
      */
-    public static function fromServerResult($serverResult, $originalJob) {
+    public static function fromServerResult($serverResult, \WF\Hypernova\Job $originalJob) {
         if (empty($serverResult['html']) && empty($serverResult['error'])) {
             throw new \InvalidArgumentException('Server result malformed');
         }
-
 
         $res = new static();
 

@@ -39,17 +39,17 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
-        $job = $this->defaultJob;
+        $job = ['name' => 'foo', 'data' => ['someData' => []]];
 
         $plugin->expects($this->once())
             ->method('getViewData')
-            ->with($this->equalTo($job->name), $this->equalTo($job->data))
-            ->willReturn($job->data);
+            ->with($this->equalTo($job['name']), $this->equalTo($job['data']))
+            ->willReturn($job['data']);
 
         $this->renderer->addPlugin($plugin);
         $this->renderer->addJob('id1', $job);
 
-        $this->assertEquals(['id1' => $job], $this->renderer->createJobs());
+        $this->assertArrayHasKey('id1', $this->renderer->createJobs());
     }
 
     public function testMultipleJobsGetCreated()
