@@ -14,7 +14,7 @@ use WF\Hypernova\Renderer;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
-    private static $raw_server_response = '{"success":true,"error":null,"results":{"myView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null}}}';
+    private static $raw_server_response = '{"success":true,"error":null,"results":{"myView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null},"MyOtherView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null}}}';
 
     /**
      * @var \WF\Hypernova\Renderer
