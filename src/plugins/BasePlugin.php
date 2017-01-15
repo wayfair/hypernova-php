@@ -36,9 +36,9 @@ class BasePlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function afterResponse($currentResponse, $originalResponse)
+    public function afterResponse($jobResults)
     {
-        // TODO: Implement afterResponse() method.
+        return $jobResults;
     }
 
     /**

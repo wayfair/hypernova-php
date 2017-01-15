@@ -134,6 +134,12 @@ class Renderer
                 }
             }
         }
+
+        foreach ($this->plugins as $plugin) {
+            $jobResults = $plugin->afterResponse($jobResults);
+        }
+
+        return $jobResults;
     }
 
     /**

@@ -51,5 +51,10 @@ interface Plugin
      */
     public function onSuccess($jobResult);
 
-    public function afterResponse($currentResponse, $originalResponse);
+    /**
+     * @param \WF\Hypernova\JobResult[] $jobResults
+     *
+     * @return mixed
+     */
+    public function afterResponse($jobResults);
 }
