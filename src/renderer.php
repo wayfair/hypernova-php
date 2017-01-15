@@ -10,7 +10,7 @@
 
 namespace WF\Hypernova;
 
-use GuzzleHttp\Exception\RequestException;
+use \GuzzleHttp\Exception\RequestException;
 
 class Renderer
 {
@@ -117,8 +117,11 @@ class Renderer
 
     /**
      * @param \WF\Hypernova\JobResult[] $jobResults
+     *
+     * @return \WF\Hypernova\JobResult[]
      */
-    protected function finalize($jobResults) {
+    protected function finalize($jobResults)
+    {
         foreach ($jobResults as $jobResult) {
             if ($jobResult->error) {
                 foreach ($this->plugins as $plugin) {
@@ -176,13 +179,16 @@ class Renderer
     /**
      * @return \GuzzleHttp\Client
      */
-    protected function getClient() {
+    protected function getClient()
+    {
         return new \GuzzleHttp\Client($this->config);
     }
 
     /**
      * @param mixed $topLevelError
      * @param \WF\Hypernova\Job[] $jobs
+     *
+     * @return \WF\Hypernova\JobResult[]
      */
     protected function fallback($topLevelError, $jobs)
     {
@@ -198,6 +204,12 @@ class Renderer
         return $result;
     }
 
+    /**
+     * @param string $moduleName
+     * @param array $data
+     *
+     * @return string
+     */
     private function getFallbackHTML($moduleName, $data)
     {
         return sprintf(

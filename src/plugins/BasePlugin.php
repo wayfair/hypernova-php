@@ -44,7 +44,7 @@ class BasePlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function getViewData($name, $data)
+    public function getViewData($name, array $data)
     {
         return $data;
     }
