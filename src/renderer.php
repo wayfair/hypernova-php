@@ -10,6 +10,8 @@
 
 namespace WF\Hypernova;
 
+use GuzzleHttp\Exception\RequestException;
+
 class Renderer
 {
 
@@ -106,10 +108,37 @@ class Renderer
         foreach ($this->plugins as $plugin) {
             $plugin->willSendRequest($jobs);
         }
+
+        $response = $this->doRequest($jobs);
+    }
+
+    protected function doRequest($jobs) {
+        // overly-clever function that takes an array of Jobs
+        // and returns ['foo' => ['name'=> '...', 'data' => [...]], 'bar' => ...]
+        $marshalledRequestData = array_reduce(
+            array_map(function (Job $job) {return $job->jsonSerialize();}, $jobs),
+            'array_merge',
+            []
+        );
+
+        $response = $this->getClient()->post($this->url);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new RequestException('Hypernova server returned a non-200 response');
+        }
+
+        //var_dump(json_decode($response->getBody()));
     }
 
     /**
-     * @param $topLevelError
+     * @return \GuzzleHttp\Client
+     */
+    protected function getClient() {
+        return new \GuzzleHttp\Client($this->config);
+    }
+
+    /**
+     * @param mixed $topLevelError
      * @param \WF\Hypernova\Job[] $jobs
      */
     protected function fallback($topLevelError, $jobs)

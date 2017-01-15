@@ -14,12 +14,16 @@ use WF\Hypernova\Renderer;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
+    private static $raw_server_response = '{"success":true,"error":null,"results":{"myView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null}}}';
 
     /**
      * @var \WF\Hypernova\Renderer
      */
     private $renderer;
 
+    /**
+     * @var \WF\Hypernova\Job
+     */
     private $defaultJob;
 
     /**
@@ -28,7 +32,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
-        $this->defaultJob = new Job('myView', 'my_component', []);
+        $this->defaultJob = new Job('myView', 'my_component', ['foo'=> ['bar'=>[], 'baz' =>[]]]);
     }
 
     public function testCreateJobs()
@@ -207,7 +211,6 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->addPlugin($plugin);
 
         $renderer->render();
-        //var_dump(json_encode(array_reduce(array_map(function($foo) {return $foo->jsonSerialize();}, $x), 'array_merge', [])));
     }
 
     /**
@@ -215,16 +218,30 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\WF\Hypernova\Renderer
      */
-    private function getMockedRenderer($shouldSendRequest)
+    private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200)
     {
         $renderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest'])
+            ->setMethods(['prepareRequest', 'getClient'])
             ->getMock();
 
         $renderer->expects($this->once())
             ->method('prepareRequest')
             ->willReturn([$shouldSendRequest, [$this->defaultJob]]);
+
+        $mockHandler = new \GuzzleHttp\Handler\MockHandler(
+            [
+                new \GuzzleHttp\Psr7\Response($clientResponseCode,
+                    [],
+                    $clientResponseCode == 200 ? self::$raw_server_response : null
+                )
+            ]
+        );
+        $handler = \GuzzleHttp\HandlerStack::create($mockHandler);
+
+        $renderer->expects($this->any())
+            ->method('getClient')
+            ->willReturn(new \GuzzleHttp\Client(['handler' => $handler]));
 
         return $renderer;
     }
