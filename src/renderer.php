@@ -143,15 +143,7 @@ class Renderer
      */
     protected function doRequest($jobs)
     {
-        // overly-clever function that takes an array of Jobs
-        // and returns ['foo' => ['name'=> '...', 'data' => [...]], 'bar' => ...]
-        $marshalledRequestData = array_reduce(
-            array_map(function (Job $job) {
-                return $job->jsonSerialize();
-            }, $jobs),
-            'array_merge',
-            []
-        );
+        $marshalledRequestData = json_encode($jobs);
 
         $response = $this->getClient()->post($this->url, ['json' => $marshalledRequestData]);
 
@@ -159,20 +151,20 @@ class Renderer
             throw new RequestException('Hypernova server returned a non-200 response');
         }
 
-        $body = json_decode($response->getBody());
-        if (empty($body->results)) {
+        $body = json_decode($response->getBody(), true);
+        if (empty($body['results'])) {
             throw new RequestException('Server response missing results');
         }
 
-        if ($body->error) {
+        if ($body['error']) {
             foreach ($this->plugins as $plugin) {
-                $plugin->onError($body->error, $body->results);
+                $plugin->onError($body['error'], $body['results']);
             }
         }
 
         $jobResults = [];
-        foreach ($body->results as $id => $jobResult) {
-            $jobResults[$id] = JobResult::fromServerResult($jobResult, $marshalledRequestData[$id]);
+        foreach ($body['results'] as $id => $jobResult) {
+            $jobResults[$id] = JobResult::fromServerResult($jobResult, $this->incomingJobs[$id]);
         }
         return $jobResults;
     }

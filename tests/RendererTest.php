@@ -14,7 +14,7 @@ use WF\Hypernova\Renderer;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
-    private static $raw_server_response = '{"success":true,"error":null,"results":{"myView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null},"MyOtherView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null}}}';
+    private static $raw_server_response = '{"success":true,"error":null,"results":{"myView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null},"myOtherView":{"name":"my_component","html":"<div data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><div>My Component</div></div>\n<script type=\"application/json\" data-hypernova-key=\"my_component\" data-hypernova-id=\"54f9f349-c59b-46b1-9e4e-e3fa17cc5d63\"><!--{\"foo\":{\"bar\":[],\"baz\":[]}}--></script>","meta":{},"duration":2.501506,"statusCode":200,"success":true,"error":null}}}';
 
     /**
      * @var \WF\Hypernova\Renderer
@@ -157,7 +157,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $renderer->expects($this->once())
             ->method('createJobs')
-            ->willReturn([$this->defaultJob]);
+            ->willReturn(['id1' => $this->defaultJob]);
 
         $renderer->addPlugin($plugin);
 
@@ -169,7 +169,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\WF\Hypernova\Response::class, $response);
         $this->assertNotEmpty($response->error);
 
-        $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results[0]->html);
+        $this->assertStringStartsWith('<div data-hypernova-key="my_component"', $response->results['id1']->html);
     }
 
     public function errorPluginProvider()
@@ -242,6 +242,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $renderer->expects($this->once())
             ->method('prepareRequest')
             ->willReturn([$shouldSendRequest, [$this->defaultJob]]);
+
+        $renderer->addJob('myView', $this->defaultJob);
+        $renderer->addJob('myOtherView', $this->defaultJob);
 
         $mockHandler = new \GuzzleHttp\Handler\MockHandler(
             [
