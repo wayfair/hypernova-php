@@ -8,7 +8,6 @@
 
 namespace WF\Hypernova;
 
-
 class Response
 {
     /**

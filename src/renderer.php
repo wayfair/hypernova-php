@@ -16,9 +16,9 @@ class Renderer
 {
 
     /**
-     * @var array default configuration
+     * @var array default configuration that will be passed to HTTP client
      */
-    protected static $config_defaults = [];
+    protected static $configDefaults = [];
 
     /**
      * @var \WF\Hypernova\Plugins\Plugin[]
@@ -43,7 +43,7 @@ class Renderer
     /**
      * Renderer constructor.
      *
-     * @param $url
+     * @param string $url
      * @param array $plugins
      * @param array $config
      */
@@ -51,7 +51,7 @@ class Renderer
     {
         $this->url = $url;
         $this->plugins = $plugins;
-        $this->config = array_merge(self::$config_defaults, $config);
+        $this->config = array_merge(self::$configDefaults, $config);
     }
 
     /**
@@ -250,7 +250,7 @@ class Renderer
      */
     public function prepareRequest($jobs)
     {
-        $prepared_jobs = array_map(function ($job) {
+        $preparedJobs = array_map(function ($job) {
             foreach ($this->plugins as $plugin) {
                 $job = $plugin->prepareRequest($job);
             }
@@ -262,6 +262,6 @@ class Renderer
             $shouldSend = $shouldSend && $plugin->shouldSendRequest($jobs);
         }
 
-        return [$shouldSend, $prepared_jobs];
+        return [$shouldSend, $preparedJobs];
     }
 }
