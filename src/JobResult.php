@@ -37,7 +37,7 @@ class JobResult
      *
      * @return \WF\Hypernova\JobResult
      */
-    public static function fromServerResult($serverResult, array $originalJobData) {
+    public static function fromServerResult($serverResult, $originalJobData) {
         if (empty($serverResult->html) && empty($serverResult->error)) {
             throw new \InvalidArgumentException('Server result malformed');
         }
@@ -47,7 +47,7 @@ class JobResult
         $res->error = $serverResult->error;
         $res->html = $serverResult->html;
         $res->success = $serverResult->success;
-        $res->originalJob = Job::fromArray($originalJobData);
+        $res->originalJob = Job::fromArray([$originalJobData['name'] => $originalJobData['data']]);
 
         return $res;
     }

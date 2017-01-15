@@ -32,7 +32,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
-        $this->defaultJob = new Job('myView', 'my_component', ['foo' => ['bar' => [], 'baz' => []]]);
+        $this->defaultJob = new Job('my_component', ['foo' => ['bar' => [], 'baz' => []]]);
     }
 
     public function testCreateJobs()
@@ -47,9 +47,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn($job->data);
 
         $this->renderer->addPlugin($plugin);
-        $this->renderer->addJob($job);
+        $this->renderer->addJob('id1', $job);
 
-        $this->assertEquals([$job], $this->renderer->createJobs());
+        $this->assertEquals(['id1' => $job], $this->renderer->createJobs());
     }
 
     public function testMultipleJobsGetCreated()
@@ -57,7 +57,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
 
         for ($i = 0; $i < 5; $i++) {
-            $this->renderer->addJob($this->defaultJob);
+            $this->renderer->addJob('id' . $i, $this->defaultJob);
         }
 
         $plugin->expects($this->exactly(5))
@@ -138,10 +138,10 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $plugin->expects($this->once())
             ->method('onError');
 
-        $this->renderer->addJob($this->defaultJob);
+        $this->renderer->addJob('id1', $this->defaultJob);
         $this->renderer->addPlugin($plugin);
 
-        $this->assertEquals([$this->defaultJob], $this->renderer->createJobs());
+        $this->assertEquals(['id1' => $this->defaultJob], $this->renderer->createJobs());
     }
 
 
@@ -208,6 +208,19 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $plugin->expects($this->once())
             ->method('willSendRequest')
             ->with($this->equalTo([$this->defaultJob]));
+
+        $renderer->addPlugin($plugin);
+
+        $renderer->render();
+    }
+
+    public function testOnSuccess() {
+        $renderer = $this->getMockedRenderer(true);
+
+        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+
+        $plugin->expects($this->exactly(2))
+            ->method('onSuccess');
 
         $renderer->addPlugin($plugin);
 

@@ -28,9 +28,8 @@ class JobTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testFactoryPopulates() {
-        $job = \WF\Hypernova\Job::fromArray(['myView' => ['name' => 'my_component', 'data' => ['some' => 'data']]]);
+        $job = \WF\Hypernova\Job::fromArray(['name' => 'my_component', 'data' => ['some' => 'data']]);
 
-        $this->assertEquals('myView', $job->id);
         $this->assertEquals('my_component', $job->name);
         $this->assertEquals(['some' => 'data'], $job->data);
     }

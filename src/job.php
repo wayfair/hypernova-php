@@ -11,17 +11,13 @@ namespace WF\Hypernova;
 
 class Job implements \JsonSerializable
 {
-
-    public $id;
-
     public $name;
 
     public $data;
 
 
-    public function __construct($id, $name, $data)
+    public function __construct($name, $data)
     {
-        $this->id = $id;
         $this->name = $name;
         $this->data = $data;
     }
@@ -36,21 +32,18 @@ class Job implements \JsonSerializable
      */
     public static function fromArray(array $arr)
     {
-        if (count($arr) !== 1) {
+        if (empty($arr['name']) || !isset($arr['data'])) {
             throw new \InvalidArgumentException('malformed job');
         }
 
-        // Yes, this is intentional.
-        foreach ($arr as $viewName => $args) {
-            return new static($viewName, $args['name'], $args['data']);
-        }
+        return new static($arr['name'], $arr['data']);
     }
 
     public function jsonSerialize()
     {
-        return [$this->id => [
+        return [
             'name' => $this->name,
             'data' => $this->data
-        ]];
+        ];
     }
 }

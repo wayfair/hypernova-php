@@ -69,14 +69,15 @@ class Renderer
     /**
      * Add a job
      *
+     * @param string $id
      * @param \WF\Hypernova\Job|array $job Job to add, { [view]: { name: String, data: ReactProps } }
      */
-    public function addJob($job)
+    public function addJob($id, $job)
     {
         if (is_array($job)) {
             $job = Job::fromArray($job);
         }
-        $this->incomingJobs[] = $job;
+        $this->incomingJobs[$id] = $job;
     }
 
     /**
@@ -219,7 +220,7 @@ class Renderer
         return array_map(function (\WF\Hypernova\Job $job) {
             foreach ($this->plugins as $plugin) {
                 try {
-                    $job = new Job($job->id, $job->name, $plugin->getViewData($job->name, $job->data));
+                    $job = new Job($job->name, $plugin->getViewData($job->name, $job->data));
                 } catch (\Exception $e) {
                     $plugin->onError($e, $this->incomingJobs);
                 }
