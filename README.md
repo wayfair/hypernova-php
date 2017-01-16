@@ -1,6 +1,6 @@
 # Hypernova-PHP
 
-> PHP client for the Hypernova service.
+> PHP client for your [Hypernova service](https://github.com/airbnb/hypernova).
 
 ## Getting Started
 
