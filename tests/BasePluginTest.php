@@ -8,7 +8,6 @@
 
 namespace WF\Hypernova\Tests;
 
-
 use WF\Hypernova\Job;
 use WF\Hypernova\JobResult;
 use WF\Hypernova\Plugins\BasePlugin;
@@ -55,13 +54,15 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data, $plugin->getViewData('id1', $data));
     }
 
-    public function testShouldSendRequest() {
+    public function testShouldSendRequest()
+    {
         $plugin = new BasePlugin();
 
         $this->assertTrue($plugin->shouldSendRequest([$this->makeJob()]));
     }
 
-    public function testWillSendRequest() {
+    public function testWillSendRequest()
+    {
         $plugin = new BasePlugin();
 
         $plugin->willSendRequest([$this->makeJob()]);
@@ -75,7 +76,8 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    private function makeJob() {
+    private function makeJob()
+    {
         return Job::fromArray(['name' => 'foo', 'data' => []]);
     }
 }
