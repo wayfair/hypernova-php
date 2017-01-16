@@ -161,10 +161,6 @@ class Renderer
     {
         $response = $this->getClient()->post($this->url, ['json' => $jobs]);
 
-        if ($response->getStatusCode() !== 200) {
-            throw new RequestException('Hypernova server returned a non-200 response');
-        }
-
         $body = json_decode($response->getBody(), true);
         if (empty($body['results'])) {
             throw new RequestException('Server response missing results');
