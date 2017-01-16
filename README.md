@@ -1,30 +1,52 @@
-## PHP client for hypernova
+# Hypernova-PHP
 
-Towards making a useful PHP client for the Hypernova platform:
+> PHP client for the Hypernova service.
 
-https://github.com/airbnb/hypernova/blob/master/docs/client-spec.md
+## Getting Started
 
-Example might look like:
+`composer install wayfair/hypernova-php`
+
+Or, `git clone` the repo somewhere `&& cd hypernova-php && composer install`.
+
+Make a `Renderer`:
 
 ```
-$renderer = new Renderer('http://path/to/service');
-$renderer->addJob('myView', ['name' => 'myFirstComponent', 'data' => ['some' => 'props']]);
-$renderer->addJob('myOtherView', ['name' => 'mySecondComponent', 'data' => ['some' => 'props']]);
+use \WF\Hypernova\Renderer;
 
-var_dump($renderer->render()); // inspect the shape of the results
+$renderer = new Renderer('http://localhost:3030/batch');
 ```
 
-Naming of the public API is still in flux, this thing really isn't a "renderer."  Naming things is hard.
+Give it some work:
 
+```
+$renderer->addJob('myViewId', ['name' => 'my_module_name', 'data' => ['some' => ['props']]);
+```
 
-Contributing:
+Optionally add a plugin or two (see plugin section):
 
-Fork it, submit a PR.  TODO: contributing guide
+```
+$renderer->addPlugin($myPlugin);
+$renderer->addPlugin($myOtherPlugin);
+```
 
-Using it:
+Then go get your rendered `Response`:
 
-`composer install` (not in packagist yet, I'll get around to it)
+```
+$response = $renderer->render();
+```
 
-Run tests:
+## Plugin API
+
+TODO: write this up.  Reference https://github.com/airbnb/hypernova-node#plugin-lifecycle-api
+
+Generally, you will want to implement some subset of the lifecycle hooks.  For 
+developer convenience, you may extend `\WF\Hypernova\Plugin\BasePlugin` which
+provides no-op implementations of all of the hooks.
+
+#### Contributing:
+
+Fork it, submit a PR.
+
+#### Run tests:
 
 `./vendor/bin/phpunit`
