@@ -12,6 +12,7 @@ namespace WF\Hypernova\Tests;
 use WF\Hypernova\Job;
 use WF\Hypernova\JobResult;
 use WF\Hypernova\Renderer;
+use WF\Hypernova\Plugins\BasePlugin;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,7 +46,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateJobs()
     {
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $job = ['name' => 'foo', 'data' => ['someData' => []]];
 
@@ -62,7 +63,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function testMultipleJobsGetCreated()
     {
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         for ($i = 0; $i < 5; $i++) {
             $this->renderer->addJob('id' . $i, $this->defaultJob);
@@ -78,7 +79,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function testPrepareRequestCallsPlugin()
     {
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->exactly(2))
             ->method('prepareRequest')
@@ -95,8 +96,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function testShouldSend()
     {
-        $pluginDontSend = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
-        $pluginDoSend = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $pluginDontSend = $this->createMock(BasePlugin::class);
+        $pluginDoSend = $this->createMock(BasePlugin::class);
 
         $pluginDontSend->expects($this->once())
             ->method('shouldSendRequest')
@@ -115,7 +116,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $renderer = $this->getMockedRenderer(false);
 
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         foreach (['willSendRequest', 'onError', 'onSuccess', 'afterResponse'] as $methodThatShouldNotBeCalled) {
             $plugin->expects($this->never())
@@ -137,7 +138,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function testGetViewDataHandlesExceptions()
     {
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->once())
             ->method('getViewData')
@@ -182,13 +183,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     public function errorPluginProvider()
     {
-        $pluginThatThrowsInPrepareRequest = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $pluginThatThrowsInPrepareRequest = $this->createMock(BasePlugin::class);
 
         $pluginThatThrowsInPrepareRequest->expects($this->once())
             ->method('prepareRequest')
             ->willThrowException(new \Exception('Exception in prepare request'));
 
-        $pluginThatThrowsInShouldSendRequest = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $pluginThatThrowsInShouldSendRequest = $this->createMock(BasePlugin::class);
 
         $pluginThatThrowsInShouldSendRequest->expects($this->once())
             ->method('shouldSendRequest')
@@ -211,7 +212,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $renderer = $this->getMockedRenderer(true);
 
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->once())
             ->method('willSendRequest')
@@ -226,7 +227,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $renderer = $this->getMockedRenderer(true);
 
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->exactly(2))
             ->method('onSuccess');
@@ -240,7 +241,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $renderer = $this->getMockedRenderer(true);
 
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->once())
             ->method('afterResponse');
@@ -261,7 +262,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 $this->defaultJob
             )]);
 
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->once())
             ->method('onError')
@@ -297,7 +298,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $renderer = $this->getMockedRenderer(true, 200, [], self::$serverErrorResponse);
 
-        $plugin = $this->createMock(\WF\Hypernova\Plugins\BasePlugin::class);
+        $plugin = $this->createMock(BasePlugin::class);
 
         $plugin->expects($this->atLeastOnce())
             ->method('onError')
