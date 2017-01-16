@@ -10,8 +10,6 @@
 
 namespace WF\Hypernova;
 
-use \GuzzleHttp\Exception\RequestException;
-
 class Renderer
 {
 
@@ -156,6 +154,7 @@ class Renderer
      * @param \WF\Hypernova\Job[] $jobs
      *
      * @return \WF\Hypernova\JobResult[]
+     * @throws \Exception
      */
     protected function doRequest($jobs)
     {
@@ -163,7 +162,7 @@ class Renderer
 
         $body = json_decode($response->getBody(), true);
         if (empty($body['results'])) {
-            throw new RequestException('Server response missing results');
+            throw new \Exception('Server response missing results');
         }
 
         if ($body['error']) {
