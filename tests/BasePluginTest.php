@@ -15,7 +15,8 @@ use WF\Hypernova\Plugins\BasePlugin;
 
 class BasePluginTest extends \PHPUnit\Framework\TestCase
 {
-    public function testPrepareRequest() {
+    public function testPrepareRequest()
+    {
         $plugin = new BasePlugin();
 
         $job = Job::fromArray(['name' => 'foo', 'data' => ['bar' => 'baz']]);
@@ -23,29 +24,58 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($job, $plugin->prepareRequest($job));
     }
 
-    public function testOnError() {
+    public function testOnError()
+    {
         $plugin = new BasePlugin();
 
         $plugin->onError(new \Exception('blah'), []);
     }
 
-    public function testOnSuccess() {
+    public function testOnSuccess()
+    {
         $plugin = new BasePlugin();
 
-        $plugin->onSuccess($this->jobResult());
+        $plugin->onSuccess($this->makeJobResult());
     }
 
-    public function testAfterResponse() {
+    public function testAfterResponse()
+    {
         $plugin = new BasePlugin();
 
-        $jobResult = $this->jobResult();
+        $jobResult = $this->makeJobResult();
         $this->assertEquals([$jobResult], $plugin->afterResponse([$jobResult]));
     }
 
-    private function jobResult() {
+    public function testGetViewData()
+    {
+        $plugin = new BasePlugin();
+
+        $data = ['foo' => 'bar'];
+
+        $this->assertEquals($data, $plugin->getViewData('id1', $data));
+    }
+
+    public function testShouldSendRequest() {
+        $plugin = new BasePlugin();
+
+        $this->assertTrue($plugin->shouldSendRequest([$this->makeJob()]));
+    }
+
+    public function testWillSendRequest() {
+        $plugin = new BasePlugin();
+
+        $plugin->willSendRequest([$this->makeJob()]);
+    }
+
+    private function makeJobResult()
+    {
         return JobResult::fromServerResult(
             ['html' => '<div>stuff</div>', 'error' => null, 'success' => true],
-            Job::fromArray(['name' => 'foo', 'data' => []])
+            $this->makeJob()
         );
+    }
+
+    private function makeJob() {
+        return Job::fromArray(['name' => 'foo', 'data' => []]);
     }
 }
