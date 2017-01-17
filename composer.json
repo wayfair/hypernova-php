@@ -21,5 +21,10 @@
     },
     "autoload-dev": {
         "psr-4": { "WF\\Hypernova\\Tests\\": "tests/" }
-    }
+    },
+    "keywords": [
+        "react",
+        "hypernova",
+        "wayfair"
+    ]
 }
