@@ -59,4 +59,4 @@ Fork it, submit a PR.
 
 #### Run tests:
 
-`./vendor/bin/phpunit`
+`composer run-script test`
