@@ -45,7 +45,8 @@ This is how you customize client behavior.  Common usecases include:
 * Inlining stack traces in development environments
 * Stopping requests to the service entirely, letting everything fall back to client rendering
 
-Generally, you will want to implement some subset of the lifecycle hooks.  For 
+Generally, you will want to implement some subset of the lifecycle hooks; maybe you
+want `onError` handling but have no need for `shouldSendRequest`.  For 
 developer convenience, you may extend `\WF\Hypernova\Plugin\BasePlugin` which
 provides no-op implementations of all of the hooks.
 
