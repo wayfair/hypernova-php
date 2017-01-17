@@ -37,11 +37,19 @@ $response = $renderer->render();
 
 ## Plugin API
 
-TODO: write this up.  Reference https://github.com/airbnb/hypernova-node#plugin-lifecycle-api
+This is how you customize client behavior.  Common usecases include:
+
+* Logging request metadata like performance timings
+* Error logging
+* Injecting/removing props
+* Inlining stack traces in development environments
+* Stopping requests to the service entirely, letting everything fall back to client rendering
 
 Generally, you will want to implement some subset of the lifecycle hooks.  For 
 developer convenience, you may extend `\WF\Hypernova\Plugin\BasePlugin` which
 provides no-op implementations of all of the hooks.
+
+TODO: write up API docs.  Reference https://github.com/airbnb/hypernova-node#plugin-lifecycle-api
 
 #### Contributing:
 
