@@ -1,5 +1,5 @@
 {
-    "name": "wf/hypernova-php",
+    "name": "wayfair/hypernova-php",
     "description": "A PHP client for hypernova.  https://github.com/airbnb/hypernova",
     "type": "library",
     "require": {
