@@ -9,7 +9,7 @@
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     },
-    "license": "BSD 2-clause",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Ben Roberts",
