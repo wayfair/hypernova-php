@@ -59,4 +59,4 @@ Fork it, submit a PR.
 
 #### Run tests:
 
-`composer run-script test`
+`composer test`
