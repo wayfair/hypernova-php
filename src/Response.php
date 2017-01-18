@@ -11,12 +11,12 @@ namespace WF\Hypernova;
 class Response
 {
     /**
-     * @var string
+     * @var array
      */
     public $error;
 
     /**
-     * @var \WF\Hypernova\JobResult[]
+     * @var \WF\Hypernova\JobResult
      */
     public $results;
 }

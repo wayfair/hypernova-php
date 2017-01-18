@@ -25,9 +25,11 @@ class DevModePluginTest extends \PHPUnit\Framework\TestCase
 
         $pluginJobResults = $plugin->afterResponse($jobResults);
 
-        $this->assertContains('The <code>nonexistent_component</code> component failed to render with Hypernova', $pluginJobResults['myView']);
-        $this->assertContains('ReferenceError: Component "nonexistent_component" not registered', $pluginJobResults['myView']);
-        $this->assertContains('at processImmediate [as _immediateCallback] (timers.js:533:5)', $pluginJobResults['myView']);
+        $myJobResultMarkup = (string) $pluginJobResults['myView'];
+
+        $this->assertContains('The <code>nonexistent_component</code> component failed to render with Hypernova', $myJobResultMarkup);
+        $this->assertContains('ReferenceError: Component "nonexistent_component" not registered', $myJobResultMarkup);
+        $this->assertContains('at processImmediate [as _immediateCallback] (timers.js:533:5)', $myJobResultMarkup);
     }
 
     public function testAfterResponseWithoutErrors()
@@ -42,8 +44,10 @@ class DevModePluginTest extends \PHPUnit\Framework\TestCase
 
         $pluginJobResults = $plugin->afterResponse($jobResults);
 
-        $this->assertNotContains('failed to render', $pluginJobResults['myView']);
-        $this->assertContains('<div>My Component</div>', $pluginJobResults['myView']);
-        $this->assertContains('<script type="application/json" data-hypernova-key="my_component"', $pluginJobResults['myView']);
+        $myJobResultMarkup = (string) $pluginJobResults['myView'];
+
+        $this->assertNotContains('failed to render', $myJobResultMarkup);
+        $this->assertContains('<div>My Component</div>', $myJobResultMarkup);
+        $this->assertContains('<script type="application/json" data-hypernova-key="my_component"', $myJobResultMarkup);
     }
 }

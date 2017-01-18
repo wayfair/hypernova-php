@@ -51,4 +51,15 @@ class JobResult
 
         return $res;
     }
+
+    /**
+     * Convenience: plugins can always pass around JobResults from afterResponse.
+     * This lets consumers cast whatever comes out to string to get the markup.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->html;
+    }
 }
