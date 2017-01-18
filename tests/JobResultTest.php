@@ -40,4 +40,11 @@ class JobResultTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($jobResult->error);
         $this->assertEquals($originalJob, $jobResult->originalJob);
     }
+
+    public function testToString() {
+        $originalJob = new Job('foo', []);
+        $jobResult = JobResult::fromServerResult(['success' => true, 'html' => '<div>data</div>', 'error' => null], $originalJob);
+
+        $this->assertEquals('<div>data</div>', (string) $jobResult);
+    }
 }

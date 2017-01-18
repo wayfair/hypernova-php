@@ -56,7 +56,7 @@ interface Plugin
     /**
      * @param \WF\Hypernova\JobResult[] $jobResults
      *
-     * @return mixed
+     * @return \WF\Hypernova\JobResult[]
      */
     public function afterResponse($jobResults);
 }

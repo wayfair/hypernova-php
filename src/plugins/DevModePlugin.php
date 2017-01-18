@@ -15,15 +15,21 @@ class DevModePlugin extends BasePlugin
         return array_map([$this, 'wrapErrors'], $jobResults);
     }
 
+    /**
+     * @param \WF\Hypernova\JobResult $jobResult
+     *
+     * @return string|\WF\Hypernova\JobResult
+     */
     protected function wrapErrors(\WF\Hypernova\JobResult $jobResult)
     {
         if (!$jobResult->error) {
-            return $jobResult->html;
+            return $jobResult;
         }
 
         list($message, $formattedStack) = $this->formatError($jobResult->error);
 
-        return sprintf(
+        // technically for purity we should make a new JobResult here rather than mutating the old one, but... eh.
+        $jobResult->html = sprintf(
             '<div style="background-color: #ff5a5f; color: #fff; padding: 12px;">
                 <p style="margin: 0">
                   <strong>Development Warning!</strong>
@@ -40,6 +46,8 @@ class DevModePlugin extends BasePlugin
             $formattedStack,
             $jobResult->html
         );
+
+        return $jobResult;
     }
 
     protected function formatError($error)
