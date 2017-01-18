@@ -1,4 +1,5 @@
-# Hypernova-PHP
+# Hypernova-PHP [![Build Status](https://travis-ci.org/wayfair/hypernova-php.svg?branch=master)](https://travis-ci.org/wayfair/hypernova-php) [![codecov](https://codecov.io/gh/wayfair/hypernova-php/branch/master/graph/badge.svg)](https://codecov.io/gh/wayfair/hypernova-php)
+
 
 > PHP client for your [Hypernova service](https://github.com/airbnb/hypernova).
 
