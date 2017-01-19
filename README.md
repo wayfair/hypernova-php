@@ -5,9 +5,7 @@
 
 ## Getting Started
 
-`composer install wayfair/hypernova-php`
-
-Or, `git clone` the repo somewhere `&& cd hypernova-php && composer install`.
+`composer require wayfair/hypernova-php`
 
 Make a `Renderer`:
 
