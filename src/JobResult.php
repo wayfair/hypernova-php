@@ -31,6 +31,16 @@ class JobResult
     public $originalJob;
 
     /**
+     * @var array
+     */
+    public $meta;
+
+    /**
+     * @var float
+     */
+    public $duration;
+
+    /**
      * @param $serverResult
      * @param \WF\Hypernova\Job $originalJob
      *
@@ -47,6 +57,8 @@ class JobResult
         $res->error = $serverResult['error'];
         $res->html = $serverResult['html'];
         $res->success = $serverResult['success'];
+        $res->meta = isset($serverResult['meta']) ? $serverResult['meta'] : [];
+        $res->duration = isset($serverResult['duration']) ? $serverResult['duration'] : null;
         $res->originalJob = $originalJob;
 
         return $res;
