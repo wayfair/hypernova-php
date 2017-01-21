@@ -198,7 +198,10 @@ class Renderer
         $result->error = $topLevelError;
         $result->results = array_map(function (\WF\Hypernova\Job $job) {
             $jobResult = new JobResult();
-            $jobResult->html = $this->getFallbackHTML($job->name, $job->data);
+            $uuid = \Ramsey\Uuid\Uuid::uuid4();
+            $jobResult->html = $this->getFallbackHTML($job->name, $job->data, $uuid);
+            $jobResult->meta = ['uuid' => (string) $uuid];
+            $jobResult->originalJob = $job;
 
             return $jobResult;
         }, $jobs);
@@ -209,12 +212,12 @@ class Renderer
     /**
      * @param string $moduleName
      * @param array $data
+     * @param \Ramsey\Uuid\UuidInterface $uuid
      *
      * @return string
      */
-    protected function getFallbackHTML($moduleName, $data)
+    protected function getFallbackHTML($moduleName, $data, $uuid)
     {
-        $uuid = \Ramsey\Uuid\Uuid::uuid4();
         return sprintf(
             '<div data-hypernova-key="%1$s" data-hypernova-id="%2$s"></div>
     <script type="application/json" data-hypernova-key="%1$s" data-hypernova-id="%2$s"><!--%3$s--></script>',
