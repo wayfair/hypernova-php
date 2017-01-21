@@ -16,7 +16,7 @@ class Response
     public $error;
 
     /**
-     * @var \WF\Hypernova\JobResult
+     * @var \WF\Hypernova\JobResult[]
      */
     public $results;
 }
