@@ -218,7 +218,6 @@ class Renderer
      */
     protected function getFallbackHTML($moduleName, $data, $uuid)
     {
-        $uuid = \Ramsey\Uuid\Uuid::uuid4();
         return sprintf(
             '<div data-hypernova-key="%1$s" data-hypernova-id="%2$s"></div>
     <script type="application/json" data-hypernova-key="%1$s" data-hypernova-id="%2$s"><!--%3$s--></script>',
