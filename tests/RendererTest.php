@@ -13,6 +13,7 @@ namespace WF\Hypernova\Tests;
 require_once __DIR__ . '/../src/plugins/Plugin.php';
 require_once __DIR__ . '/../src/plugins/BasePlugin.php';
 
+use GuzzleHttp\Client;
 use WF\Hypernova\Job;
 use WF\Hypernova\JobResult;
 use WF\Hypernova\Renderer;
@@ -325,25 +326,32 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     private function getMockedRenderer($shouldSendRequest, $clientResponseCode = 200, $additionalMockMethods = [], $clientResponse = null)
     {
         // Secret sauce so we don't have to mock our HTTP client
-        $mockHandler = new \GuzzleHttp\Handler\MockHandler(
+        $mock = new \GuzzleHttp\Subscriber\Mock(
             [
-                new \GuzzleHttp\Psr7\Response(
+                new \GuzzleHttp\Message\Response(
                     $clientResponseCode,
                     [],
-                    $clientResponseCode == 200 ? ($clientResponse ?: self::$rawServerResponse) : null
+                    $clientResponseCode == 200 ? \GuzzleHttp\Stream\Stream::factory($clientResponse ?: self::$rawServerResponse) : null
                 )
             ]
         );
-        $handler = \GuzzleHttp\HandlerStack::create($mockHandler);
 
         $renderer = $this->getMockBuilder(Renderer::class)
-            ->setConstructorArgs(['http://localhost:8080/batch', [], ['handler' => $handler]])
-            ->setMethods(array_merge(['prepareRequest'], (array)$additionalMockMethods))
+            ->setConstructorArgs(['http://localhost:8080/batch'])
+            ->setMethods(array_merge(['prepareRequest', 'getClient'], (array)$additionalMockMethods))
             ->getMock();
 
         $renderer->expects($this->once())
             ->method('prepareRequest')
             ->willReturn([$shouldSendRequest, ['id1' => $this->defaultJob]]);
+
+      $client = new \GuzzleHttp\Client();
+
+      $client->getEmitter()->attach($mock);
+
+      $renderer->expects($this->any())
+            ->method('getClient')
+            ->willReturn($client);
 
         $renderer->addJob('myView', $this->defaultJob);
         $renderer->addJob('myOtherView', $this->defaultJob);
