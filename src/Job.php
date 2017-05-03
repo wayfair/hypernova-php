@@ -37,7 +37,7 @@ class Job implements \JsonSerializable
         if (empty($arr['name']) || !isset($arr['data'])) {
             throw new \InvalidArgumentException('malformed job');
         }
-        $metadata = $arr['metadata'] ?? [];
+        $metadata = isset($arr['metadata']) ? $arr['metadata'] : [];
         return new static($arr['name'], $arr['data'], $metadata);
     }
 
