@@ -14,15 +14,18 @@ class Job implements \JsonSerializable
 
     public $data;
 
+    public $metadata;
 
-    public function __construct($name, $data)
+
+    public function __construct($name, $data, $metadata = [])
     {
         $this->name = $name;
         $this->data = $data;
+        $this->metadata = $metadata;
     }
 
     /**
-     * Factory to create from ['viewName' => ['name' => $name, 'data' => $data]]
+     * Factory to create from ['viewName' => ['name' => $name, 'data' => $data, 'metadata' => $metadata]]
      *
      * @param array $arr input array
      *
@@ -34,15 +37,16 @@ class Job implements \JsonSerializable
         if (empty($arr['name']) || !isset($arr['data'])) {
             throw new \InvalidArgumentException('malformed job');
         }
-
-        return new static($arr['name'], $arr['data']);
+        $metadata = isset($arr['metadata']) ? $arr['metadata'] : [];
+        return new static($arr['name'], $arr['data'], $metadata);
     }
 
     public function jsonSerialize()
     {
         return [
             'name' => $this->name,
-            'data' => $this->data
+            'data' => $this->data,
+            'metadata' => $this->metadata
         ];
     }
 }

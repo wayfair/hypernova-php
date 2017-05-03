@@ -3,6 +3,14 @@
 
 > PHP client for your [Hypernova service](https://github.com/airbnb/hypernova).
 
+## Why Hypernova?
+
+The broader question tends to be "how do I Server-Side Render my React app?"  You may have this as a business requirement (e.g. SEO) or just want to give users the fastest initial render possible.
+
+Assuming you have a PHP backend (why are you here, otherwise?), generally you will want to stand up a node.js service to do the rendering for you.  You could _try_ [phpv8js](https://github.com/phpv8/v8js) but I believe it is contraindicated for production use at any scale.  That's just my opinion, do your own research :grin:
+
+So then - write your own node.js service, or use one off the shelf.  Writing your own node.js service isn't terrifically hard - you could reasonably stand up a thing that would render react components for you in ~20 lines of code.  We personally went with hypernova because it's lightweight, pluggable (see the plugin system), performant (see the clever bytecode caching in `createVM`), and has nice client-side fallback behavior in case the service has issues.
+
 ## Getting Started
 
 `composer require wayfair/hypernova-php`
@@ -32,6 +40,8 @@ Then go get your rendered `Response`:
 
 ```
 $response = $renderer->render();
+
+echo $response->results['myViewId']->html;
 ```
 
 ## Plugin API
@@ -49,7 +59,7 @@ want `onError` handling but have no need for `shouldSendRequest`.  For
 developer convenience, you may extend `\WF\Hypernova\Plugin\BasePlugin` which
 provides no-op implementations of all of the hooks.
 
-TODO: write up API docs.  Reference https://github.com/airbnb/hypernova-node#plugin-lifecycle-api
+See the [js client docs](https://github.com/airbnb/hypernova-node#plugin-lifecycle-api) for full descriptions of the available hooks.
 
 #### Contributing:
 
