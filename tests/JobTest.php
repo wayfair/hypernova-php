@@ -43,4 +43,16 @@ class JobTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('my_component', $job->name);
         $this->assertEquals(['some' => 'data'], $job->data);
     }
+
+    /**
+     * @return void
+     */
+    public function testFactoryPopulatesWithMetadata()
+    {
+        $job = \WF\Hypernova\Job::fromArray(['name' => 'my_component', 'data' => ['some' => 'data'], 'metadata' => ['some_other' => 'metadata']]);
+
+        $this->assertEquals('my_component', $job->name);
+        $this->assertEquals(['some' => 'data'], $job->data);
+        $this->assertEquals(['some_other' => 'metadata'], $job->metadata);
+    }
 }
