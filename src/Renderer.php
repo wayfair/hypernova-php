@@ -235,7 +235,7 @@ class Renderer
         return array_map(function (\WF\Hypernova\Job $job) {
             foreach ($this->plugins as $plugin) {
                 try {
-                    $job = new Job($job->name, $plugin->getViewData($job->name, $job->data));
+                    $job = new Job($job->name, $plugin->getViewData($job->name, $job->data), $job->metadata);
                 } catch (\Exception $e) {
                     $plugin->onError($e, $this->incomingJobs);
                 }
