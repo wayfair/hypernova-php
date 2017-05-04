@@ -66,6 +66,23 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('id1', $this->callInternalMethodOfThing($this->renderer, 'createJobs'));
     }
 
+    public function testCreateJobsWithMetadata()
+    {
+        $plugin = $this->createMock(BasePlugin::class);
+
+        $job = ['name' => 'foo', 'data' => ['someData' => []], 'metadata' => ['some_other' => 'foo']];
+
+        $plugin->expects($this->once())
+            ->method('getViewData')
+            ->with($this->equalTo($job['name']), $this->equalTo($job['data']))
+            ->willReturn($job['data']);
+        $this->renderer->addPlugin($plugin);
+        $this->renderer->addJob('id1', $job);
+        $createdJobs = $this->callInternalMethodOfThing($this->renderer, 'createJobs');
+        $this->assertObjectHasAttribute('metadata', $createdJobs['id1']);
+        $this->assertEquals('foo', $createdJobs['id1']->metadata['some_other']);
+    }
+
     public function testMultipleJobsGetCreated()
     {
         $plugin = $this->createMock(BasePlugin::class);
