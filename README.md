@@ -26,7 +26,7 @@ $renderer = new Renderer('http://localhost:3030/batch');
 Give it some work:
 
 ```
-$renderer->addJob('myViewId', ['name' => 'my_module_name', 'data' => ['some' => ['props']]);
+$renderer->addJob('myViewId', ['name' => 'my_module_name', 'data' => ['some' => ['props']]]);
 ```
 
 Optionally add a plugin or two (see plugin section):
