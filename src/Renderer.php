@@ -49,7 +49,7 @@ class Renderer
     {
         $this->url = $url;
         $this->plugins = $plugins;
-        $this->config = array_merge(self::$configDefaults, $config);
+        $this->config = array_merge(static::$configDefaults, $config);
     }
 
     /**
