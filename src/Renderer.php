@@ -250,18 +250,15 @@ class Renderer
      */
     protected function prepareRequest($jobs)
     {
-        $preparedJobs = array_map(function ($job) {
-            foreach ($this->plugins as $plugin) {
-                $job = $plugin->prepareRequest($job);
-            }
-            return $job;
-        }, $jobs);
+        foreach ($this->plugins as $plugin) {
+          $jobs = $plugin->prepareRequest($jobs);
+        }
 
         $shouldSend = true;
         foreach ($this->plugins as $plugin) {
             $shouldSend = $shouldSend && $plugin->shouldSendRequest($jobs);
         }
 
-        return [$shouldSend, $preparedJobs];
+        return [$shouldSend, $jobs];
     }
 }

@@ -104,8 +104,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $plugin->expects($this->exactly(2))
             ->method('prepareRequest')
-            ->with($this->equalTo($this->defaultJob))
-            ->willReturn($this->defaultJob);
+            ->with($this->equalTo([$this->defaultJob]))
+            ->willReturn([$this->defaultJob]);
 
         $this->renderer->addPlugin($plugin);
         $this->renderer->addPlugin($plugin);
