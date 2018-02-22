@@ -19,8 +19,9 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         $plugin = new BasePlugin();
 
         $job = Job::fromArray(['name' => 'foo', 'data' => ['bar' => 'baz']]);
+        $jobs = [$job];
 
-        $this->assertEquals($job, $plugin->prepareRequest($job));
+        $this->assertEquals($jobs, $plugin->prepareRequest($jobs, [$jobs]));
     }
 
     public function testOnError()

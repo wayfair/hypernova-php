@@ -250,15 +250,18 @@ class Renderer
      */
     protected function prepareRequest($jobs)
     {
+        $parsedJobs = $jobs;
         foreach ($this->plugins as $plugin) {
-          $jobs = $plugin->prepareRequest($jobs);
+          // Pass both jobs we are working with an original, incoming jobs so that every plugin has a chance
+          // to see _all_ original jobs.
+          $parsedJobs = $plugin->prepareRequest($parsedJobs, $jobs);
         }
 
         $shouldSend = true;
         foreach ($this->plugins as $plugin) {
-            $shouldSend = $shouldSend && $plugin->shouldSendRequest($jobs);
+            $shouldSend = $shouldSend && $plugin->shouldSendRequest($parsedJobs);
         }
 
-        return [$shouldSend, $jobs];
+        return [$shouldSend, $parsedJobs];
     }
 }
