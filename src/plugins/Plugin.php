@@ -24,7 +24,7 @@ interface Plugin
      * @param \WF\Hypernova\Job[]   $originalJobs
      * @return \WF\Hypernova\Job
      */
-    public function prepareRequest(array $jobs, array $originalJobs);
+    public function prepareRequest(array $jobs, array $originalJobs) : array;
 
     /**
      * @param \WF\Hypernova\Job[] $jobs
