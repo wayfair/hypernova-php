@@ -36,7 +36,7 @@ class Renderer
     /**
      * @var \WF\Hypernova\Job[]
      */
-    private $incomingJobs = [];
+    protected $incomingJobs = [];
 
     /**
      * Renderer constructor.
