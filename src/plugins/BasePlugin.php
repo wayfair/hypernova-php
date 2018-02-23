@@ -14,9 +14,9 @@ class BasePlugin implements Plugin
     /**
      * {@inheritdoc}
      */
-    public function prepareRequest($request)
+    public function prepareRequest(array $jobs, array $originalJobs)
     {
-        return $request;
+        return $jobs;
     }
 
     /**

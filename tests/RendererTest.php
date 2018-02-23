@@ -105,8 +105,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $plugin->expects($this->exactly(2))
             ->method('prepareRequest')
-            ->with($this->equalTo($this->defaultJob))
-            ->willReturn($this->defaultJob);
+            ->with($this->equalTo([$this->defaultJob]))
+            ->willReturn([$this->defaultJob]);
 
         $this->renderer->addPlugin($plugin);
         $this->renderer->addPlugin($plugin);
@@ -121,6 +121,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $pluginDontSend = $this->createMock(BasePlugin::class);
         $pluginDoSend = $this->createMock(BasePlugin::class);
 
+        $pluginDoSend->method('prepareRequest')->will($this->returnArgument(0));
+        $pluginDontSend->method('prepareRequest')->will($this->returnArgument(0));
+
         $pluginDontSend->expects($this->once())
             ->method('shouldSendRequest')
             ->willReturn(false);
@@ -131,7 +134,9 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->renderer->addPlugin($pluginDontSend);
         $this->renderer->addPlugin($pluginDoSend);
 
-        $this->assertFalse($this->callInternalMethodOfThing($this->renderer, 'prepareRequest', [[$this->defaultJob]])[0]);
+        $result = $this->callInternalMethodOfThing($this->renderer, 'prepareRequest', [[$this->defaultJob]]);
+        $this->assertEquals([$this->defaultJob], $result[1]);
+        $this->assertFalse($result[0]);
     }
 
     public function testRenderShouldNotSend()

@@ -20,10 +20,11 @@ interface Plugin
     public function getViewData($name, array $data);
 
     /**
-     * @param \WF\Hypernova\Job $request
+     * @param \WF\Hypernova\Job[]   $jobs
+     * @param \WF\Hypernova\Job[]   $originalJobs
      * @return \WF\Hypernova\Job
      */
-    public function prepareRequest($request);
+    public function prepareRequest(array $jobs, array $originalJobs);
 
     /**
      * @param \WF\Hypernova\Job[] $jobs
