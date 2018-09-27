@@ -9,10 +9,6 @@
 
 namespace WF\Hypernova\Tests;
 
-// These are needed to make phpunit code coverage not fatal.  For some reason.  Sigh.
-require_once __DIR__ . '/../src/plugins/Plugin.php';
-require_once __DIR__ . '/../src/plugins/BasePlugin.php';
-
 use WF\Hypernova\Job;
 use WF\Hypernova\JobResult;
 use WF\Hypernova\Renderer;
