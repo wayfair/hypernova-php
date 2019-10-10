@@ -11,7 +11,7 @@ namespace WF\Hypernova;
 class Response
 {
     /**
-     * @var array
+     * @var \Exception
      */
     public $error;
 
