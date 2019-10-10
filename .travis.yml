@@ -4,7 +4,7 @@ language: php
 # Versions of PHP you want your project run with.
 php:
   - 5.6
-  - 7.4
+  - 7.3
 
 # Commands to be run before your environment runs.
 before_script:
