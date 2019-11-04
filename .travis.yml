@@ -14,7 +14,7 @@ before_script:
 
 # Commands you want to run that will verify your build.
 script:
-  - phpunit --coverage-text --coverage-clover=coverage.clover
+  - php vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
