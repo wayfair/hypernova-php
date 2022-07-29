@@ -1,4 +1,3 @@
-
 # -*- mode:yaml; indent-tabs-mode: nil; -*-
 ---
 
@@ -13,20 +12,12 @@ on:
         default: '8.1'
 jobs:
   build-and-test-job:
+    name: Test in PHP version ${{ inputs.php-version }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
+      - name: Checkout repo
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
-     - name: Run test suite
-       run: composer test
+      - name: Run test suite
+        run: composer test
