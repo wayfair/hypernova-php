@@ -40,7 +40,7 @@ class Job implements \JsonSerializable
         $metadata = isset($arr['metadata']) ? $arr['metadata'] : [];
         return new static($arr['name'], $arr['data'], $metadata);
     }
-
+    #[\ReturnTypeWillChange] 
     public function jsonSerialize()
     {
         return [
