@@ -2,22 +2,28 @@ name: PHP Composer
 
 on:
   push:
-    branches: [ "patch-1" ]
   pull_request:
-    branches: [ "patch-1" ]
 
 permissions:
   contents: read
 
 jobs:
-  build:
-
+  run:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest,]
+        php-versions: ['7.4', '8.1']
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
-      - uses: actions/checkout@v3
-      - name: PHP Info
-        run: php -info
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+      - name: Check PHP Version
+        run: php -v
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
       - name: Install dependencies
