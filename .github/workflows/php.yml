@@ -1,13 +1,10 @@
 name: PHP Composer
 
 on:
-  workflow_call:
-    # No attempt to enforce strong data types.
-    inputs:
-      php-version:
-        description: 'The php version under which to test'
-        type: string
-        default: '8.1'
+  push:
+    branches: [ "patch-1" ]
+  pull_request:
+    branches: [ "patch-1" ]
 
 permissions:
   contents: read
@@ -19,16 +16,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ inputs.php-version }}"
-          coverage: "none"
       - name: PHP Info
         run: php -info
-      - name: Validate composer.json and composer.lock ${{ inputs.php-version }}
+      - name: Validate composer.json and composer.lock
         run: composer validate --strict
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress ${{ inputs.php-version }}
+        run: composer install --prefer-dist --no-progress
       - name: Run test suite
         run: composer run-script test
