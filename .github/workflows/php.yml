@@ -20,10 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
-          uses: "shivammathur/setup-php@v2"
-          with:
-            php-version: "${{ inputs.php-version }}"
-            coverage: "none"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ inputs.php-version }}"
+          coverage: "none"
       - name: PHP Info
         run: php -info
       - name: Validate composer.json and composer.lock ${{ inputs.php-version }}
