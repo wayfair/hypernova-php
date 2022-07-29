@@ -12,7 +12,7 @@ on:
         type: string
         default: '8.1'
 jobs:
-  build:
+  build-and-test-job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
