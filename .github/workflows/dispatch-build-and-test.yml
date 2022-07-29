@@ -1,0 +1,46 @@
+# -*- mode:yaml; indent-tabs-mode: nil; -*-
+
+# Since this is an external WEBUI or RCP call, limit the inputs to avoid shell injection problems.
+---
+
+name: 'dispatch-build-and-test'
+
+on:
+  workflow_dispatch:
+    inputs:
+      phpversion:
+        description: 'what php version to test against'
+        type: choice
+        options:
+          - '7.4'
+          - '8.0'
+          - '8.1'
+        default: '8.1'
+      compileroptimizationlevel:
+        description: 'The g++ -O flag number'
+        type: choice
+        options:
+          - '0'
+          - '1'
+          - '2'
+        default: '2'
+      valgrindtool:
+        # The possible choices match /usr/lib64/valgrind/*-amd64-linux
+        # There are other valgrind flags such as --leak-check=full --show-leak-kinds=all
+        # but those are not supported by run-tests.php.
+        # See https://valgrind.org/docs/manual/manual.html
+        description: 'If not none, the -M argument to run-tests.php; the valgrind --tool argument '
+        type: choice
+        options:
+          - 'memcheck'
+          - 'helgrind'
+          - 'drd'
+          - 'none'
+        default: 'none'
+jobs:
+  call-build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
+    with:
+      php-version: ${{ github.event.inputs.phpversion }}
+      compiler-optimization-level: ${{ github.event.inputs.compileroptimizationlevel }}
+      valgrind-tool: ${{ github.event.inputs.valgrindtool }}

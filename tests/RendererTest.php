@@ -35,7 +35,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->renderer = new \WF\Hypernova\Renderer('http://localhost:8080/batch');
         $this->defaultJob = new Job('my_component', ['foo' => ['bar' => [], 'baz' => []]]);
