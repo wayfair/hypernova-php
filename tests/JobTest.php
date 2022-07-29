@@ -14,17 +14,17 @@ class JobTest extends \PHPUnit\Framework\TestCase
      * @param array $arr
      *
      * @dataProvider badFactoryDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testThrowsMalformedException($arr)
     {
+        $this->expectException(\InvalidArgumentException::class);
         \WF\Hypernova\Job::fromArray($arr);
     }
 
     /**
      * @return array
      */
-    public function badFactoryDataProvider()
+    public function badFactoryDataProvider(): array
     {
         return [
             [[]],

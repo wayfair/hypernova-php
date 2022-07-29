@@ -15,14 +15,14 @@ class JobResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider badServerResultProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testFromServerResultBadData($data)
     {
+        $this->expectException(\InvalidArgumentException::class);
         JobResult::fromServerResult($data, new Job('foo', []));
     }
 
-    public function badServerResultProvider()
+    public function badServerResultProvider(): array
     {
         return [
             [null],
