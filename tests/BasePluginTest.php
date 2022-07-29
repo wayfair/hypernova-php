@@ -29,6 +29,7 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         $plugin = new BasePlugin();
 
         $plugin->onError(new \Exception('blah'), []);
+        self::assertTrue(true);
     }
 
     public function testOnSuccess()
@@ -36,6 +37,7 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         $plugin = new BasePlugin();
 
         $plugin->onSuccess($this->makeJobResult());
+        self::assertTrue(true);
     }
 
     public function testAfterResponse()
@@ -67,6 +69,7 @@ class BasePluginTest extends \PHPUnit\Framework\TestCase
         $plugin = new BasePlugin();
 
         $plugin->willSendRequest([$this->makeJob()]);
+        self::assertTrue(true);
     }
 
     private function makeJobResult()
