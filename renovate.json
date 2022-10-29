@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Renovate configuration for hypernova php repository",
+  "extends": [
+    "config:base",
+    ":dependencyDashboard",
+    ":rebaseStalePrs"
+  ],
+  "schedule": [
+    "before 3am every weekday"
+  ],
+  "enabledManagers": [
+    "github-actions"
+  ],
+  "composer": {
+    "packageRules": [
+      {
+        "description": "Wait 3 days before opening a PR for new major version updates",
+        "matchUpdateTypes": ["major"]
+      },
+      {
+        "description": "Automerge non-major version updates (assuming the CI pipelines pass)",
+        "matchUpdateTypes": ["patch", "minor"]
+      }
+    ]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}
