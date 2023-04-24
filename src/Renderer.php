@@ -179,11 +179,11 @@ class Renderer
     }
 
     /**
-     * @return \GuzzleHttp\Client
+     * @return \WF\Hypernova\Http\Client
      */
     protected function getClient()
     {
-        return new \GuzzleHttp\Client($this->config);
+        return new \WF\Hypernova\Http\Client($this->config);
     }
 
     /**
@@ -198,7 +198,7 @@ class Renderer
         $result->error = $topLevelError;
         $result->results = array_map(function (\WF\Hypernova\Job $job) {
             $jobResult = new JobResult();
-            $uuid = \Ramsey\Uuid\Uuid::uuid4();
+            $uuid = random_bytes(16);
             $jobResult->html = $this->getFallbackHTML($job->name, $job->data, $uuid);
             $jobResult->meta = ['uuid' => (string) $uuid];
             $jobResult->originalJob = $job;
@@ -212,7 +212,7 @@ class Renderer
     /**
      * @param string $moduleName
      * @param array $data
-     * @param \Ramsey\Uuid\UuidInterface $uuid
+     * @param string $uuid
      *
      * @return string
      */
