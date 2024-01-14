@@ -6,8 +6,8 @@ jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 🧼 lint renovate config # Validates changes to renovate.json config file
-        uses: suzuki-shunsuke/github-action-renovate-config-validator@v0.1.2
+        uses: suzuki-shunsuke/github-action-renovate-config-validator@v1.0.1
         with:
           config_file_path: 'renovate.json'
