@@ -255,7 +255,7 @@ class Renderer
     {
         $preparedJobs = $jobs;
         foreach ($this->plugins as $plugin) {
-            // Pass both jobs we are working with an original, incoming jobs so
+            // Pass both jobs we are working with and original, incoming jobs so
             // that every plugin has a chance to see _all_ original jobs.
             $preparedJobs = $plugin->prepareRequest($preparedJobs, $jobs);
         }
